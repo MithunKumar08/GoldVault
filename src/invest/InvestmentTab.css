@@ -1,0 +1,324 @@
+/* ---------------------------------------------------------------------- */
+/* Layout shells                                                          */
+/* Uses tokens from theme.css (--ink, --gold, --maroon, --ivory, etc.)    */
+/* ---------------------------------------------------------------------- */
+
+.investment-card {
+  width: 100%;
+  max-width: 30rem;
+  margin: auto;
+  border: 1px solid var(--sand);
+  border-radius: 16px;
+  background: #fff;
+  padding: 2.5rem;
+  box-shadow: 0 1px 2px rgba(28, 26, 23, 0.06);
+  box-sizing: border-box;
+  font-family: var(--font-body);
+}
+
+.investment-flow {
+  width: 100%;
+  max-width: 28rem;
+  margin: 0 auto;
+  font-family: var(--font-body);
+}
+
+.investment-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.investment-subtitle {
+  margin: 0.25rem 0 0;
+  font-size: 0.875rem;
+  color: var(--text-muted-dark);
+}
+
+.icon-sm {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Plan selection                                                         */
+/* ---------------------------------------------------------------------- */
+
+.plan-grid {
+  margin-top: 1.25rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+
+.plan-option {
+  border: 1px solid var(--sand);
+  border-radius: 12px;
+  padding: 0.75rem;
+  text-align: left;
+  background: #fff;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease, transform 0.1s ease;
+}
+
+.plan-option:hover {
+  border-color: var(--gold);
+  transform: translateY(-1px);
+}
+
+.plan-option--active {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--text-on-ink);
+}
+
+.plan-option--active .icon-sm {
+  color: var(--gold-bright);
+}
+
+.plan-option:not(.plan-option--active) .icon-sm {
+  color: var(--gold-dim);
+}
+
+.plan-name {
+  margin-top: 0.5rem;
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.plan-rate {
+  margin-top: 0.125rem;
+  font-family: var(--font-ledger);
+  font-size: 0.75rem;
+  color: var(--text-muted-dark);
+}
+
+.plan-option--active .plan-rate {
+  color: var(--text-muted-on-ink);
+}
+
+.plan-blurb {
+  margin: 0.5rem 0 0;
+  font-size: 0.75rem;
+  color: var(--text-muted-dark);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Amount input                                                           */
+/* ---------------------------------------------------------------------- */
+
+.amount-section {
+  margin-top: 1.25rem;
+}
+
+.field-label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-muted-dark);
+}
+
+.amount-input-wrap {
+  position: relative;
+}
+
+.amount-prefix {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1rem;
+  color: var(--text-muted-dark);
+}
+
+.amount-input {
+  box-sizing: border-box;
+  width: 100%;
+  border: 1px solid var(--sand);
+  border-radius: 8px;
+  padding: 1rem 0.75rem 0.625rem 1.75rem;
+  font-family: var(--font-ledger);
+  font-size: 1.5rem;
+  color: var(--text-dark);
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.amount-input:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(198, 161, 91, 0.15);
+}
+
+.field-error {
+  margin: 0.25rem 0 0;
+  font-size: 0.75rem;
+  color: var(--maroon-bright);
+}
+
+.quick-amounts {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.quick-amount {
+  border: 1px solid var(--sand);
+  border-radius: 9999px;
+  padding: 0.6rem 1rem;
+  font-family: var(--font-ledger);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-muted-dark);
+  background: #fff;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+
+.quick-amount:hover {
+  border-color: var(--gold);
+}
+
+.quick-amount--active {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--gold-bright);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Projection box                                                         */
+/* ---------------------------------------------------------------------- */
+
+.projection-box {
+  margin-top: 1.25rem;
+  border-radius: 12px;
+  background: var(--ivory-dim);
+  padding: 0.85rem 1.1rem;
+  font-size: 0.875rem;
+}
+
+.projection-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.25rem;
+}
+
+.projection-row:first-child {
+  margin-top: 0;
+}
+
+.projection-label {
+  color: var(--text-muted-dark);
+}
+
+.projection-value {
+  font-family: var(--font-ledger);
+  font-weight: 500;
+  color: var(--text-dark);
+}
+
+.projection-note {
+  margin: 0.5rem 0 0;
+  font-size: 0.75rem;
+  color: var(--text-muted-dark);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Buttons                                                                 */
+/* ---------------------------------------------------------------------- */
+
+.btn-primary {
+  margin-top: 0.75rem;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  border: none;
+  border-radius: 8px;
+  background: var(--gold);
+  padding: 0.85rem;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.btn-primary:hover {
+  background: var(--gold-bright);
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+  border: none;
+  background: none;
+  padding: 0;
+  font-size: 0.875rem;
+  color: var(--text-muted-dark);
+  cursor: pointer;
+}
+
+.back-btn:hover {
+  color: var(--maroon);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Payment step summary                                                   */
+/* ---------------------------------------------------------------------- */
+
+.summary-box {
+  margin-bottom: 1.25rem;
+  border: 1px solid var(--sand);
+  border-radius: 12px;
+  background: var(--ivory-dim);
+  padding: 0.85rem 1.1rem;
+  font-size: 0.875rem;
+}
+
+.summary-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--text-muted-dark);
+  margin-top: 0.25rem;
+}
+
+.summary-row:first-child {
+  margin-top: 0;
+}
+
+.summary-value {
+  font-family: var(--font-ledger);
+  font-weight: 500;
+  color: var(--text-dark);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Responsive                                                              */
+/* ---------------------------------------------------------------------- */
+
+@media (max-width: 420px) {
+  .investment-card {
+    padding: 1.25rem;
+    border-radius: 12px;
+  }
+
+  .plan-grid {
+    gap: 0.375rem;
+  }
+}

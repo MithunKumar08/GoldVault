@@ -1,0 +1,244 @@
+.gv-tx {
+  min-height: 100vh;
+  background: var(--ivory);
+}
+
+.gv-tx-main {
+  max-width: 56rem;
+  margin: 0 auto;
+  padding: 2.5rem 2.5rem 4rem;
+}
+
+.gv-tx-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+
+.gv-tx-head h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.gv-tx-export {
+  flex-shrink: 0;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Summary strip                                                          */
+/* ---------------------------------------------------------------------- */
+
+.gv-tx-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.gv-tx-summary-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  background: #fff;
+  border: 1px solid var(--sand);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+}
+
+.gv-tx-summary-label {
+  font-size: 0.75rem;
+  color: var(--text-muted-dark);
+}
+
+.gv-tx-summary-value {
+  font-family: var(--font-ledger);
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: var(--text-dark);
+}
+
+.gv-tx-summary-value.positive {
+  color: var(--sage);
+}
+
+.gv-tx-summary-value.negative {
+  color: var(--maroon-bright);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Controls                                                                */
+/* ---------------------------------------------------------------------- */
+
+.gv-tx-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.75rem;
+}
+
+.gv-tx-filters {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.gv-tx-filter {
+  border: 1px solid var(--sand);
+  background: #fff;
+  border-radius: 9999px;
+  padding: 0.45rem 1rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-muted-dark);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+
+.gv-tx-filter:hover {
+  border-color: var(--gold);
+}
+
+.gv-tx-filter.active {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--gold-bright);
+}
+
+.gv-tx-search {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid var(--sand);
+  border-radius: 8px;
+  padding: 0.5rem 0.85rem;
+  background: #fff;
+  min-width: 14rem;
+}
+
+.gv-tx-search svg {
+  color: var(--text-muted-dark);
+  flex-shrink: 0;
+}
+
+.gv-tx-search input {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--text-dark);
+  width: 100%;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Grouped ledger                                                          */
+/* ---------------------------------------------------------------------- */
+
+.gv-tx-group {
+  margin-bottom: 2rem;
+}
+
+.gv-tx-group-title {
+  margin: 0 0 0.75rem;
+  font-family: var(--font-ledger);
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted-dark);
+}
+
+.gv-ledger-card {
+  background: #fff;
+  border: 1px solid var(--ivory-dim);
+  border-radius: 12px;
+  padding: 0.5rem 1.25rem;
+}
+
+.gv-ledger-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.gv-ledger-dot {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.gv-ledger-dot.credit {
+  background: rgba(92, 122, 99, 0.12);
+  color: var(--sage);
+}
+
+.gv-ledger-dot.debit {
+  background: rgba(107, 30, 35, 0.1);
+  color: var(--maroon);
+}
+
+.gv-ledger-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-dark);
+}
+
+.gv-ledger-date {
+  font-size: 0.75rem;
+  color: var(--text-muted-dark);
+  margin-top: 0.1rem;
+}
+
+.gv-ledger-right {
+  text-align: right;
+}
+
+.gv-ledger-sub {
+  font-family: var(--font-ledger);
+  font-size: 0.75rem;
+  color: var(--text-muted-dark);
+  margin-top: 0.15rem;
+}
+
+.gv-tx-empty {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--text-muted-dark);
+  font-size: 0.9rem;
+  background: #fff;
+  border: 1px dashed var(--sand);
+  border-radius: 12px;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Responsive                                                              */
+/* ---------------------------------------------------------------------- */
+
+@media (max-width: 720px) {
+  .gv-tx-main {
+    padding: 2rem 1.25rem 3rem;
+  }
+
+  .gv-tx-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .gv-tx-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .gv-tx-search {
+    min-width: 0;
+  }
+}

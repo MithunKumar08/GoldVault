@@ -1,0 +1,468 @@
+.gv-dash {
+  min-height: 100vh;
+  background: var(--ivory);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Top bar                                                                 */
+/* ---------------------------------------------------------------------- */
+
+.gv-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2.5rem;
+  background: var(--ink);
+  color: var(--text-on-ink);
+}
+
+.gv-topbar .gv-login-brand {
+  font-size: 1.05rem;
+}
+
+.gv-nav {
+  display: flex;
+  gap: 1.75rem;
+}
+
+.gv-nav a {
+  color: var(--text-muted-on-ink);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding-bottom: 0.35rem;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.gv-nav a:hover {
+  color: var(--ivory);
+}
+
+.gv-nav a.active {
+  color: var(--gold-bright);
+  border-bottom-color: var(--gold-bright);
+}
+
+.gv-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.gv-topbar-right a {
+  color: var(--text-muted-on-ink);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding-bottom: 0.35rem;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.gv-topbar-right a:hover {
+  color: var(--ivory);
+}
+
+.gv-topbar-right a.active {
+  color: var(--gold-bright);
+  border-bottom-color: var(--gold-bright);
+}
+
+.gv-icon-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted-on-ink);
+  cursor: pointer;
+  display: flex;
+}
+
+.gv-icon-btn:hover {
+  color: var(--gold-bright);
+}
+
+.gv-avatar {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  background: var(--gold-dim);
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Main layout                                                             */
+/* ---------------------------------------------------------------------- */
+
+.gv-dash-main {
+  max-width: 68rem;
+  margin: 0 auto;
+  padding: 2.5rem 2.5rem 4rem;
+}
+
+.gv-eyebrow {
+  margin: 0 0 0.35rem;
+  font-family: var(--font-ledger);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Hero balance card                                                       */
+/* ---------------------------------------------------------------------- */
+
+.gv-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  background: radial-gradient(circle at 85% 20%, var(--ink-soft), var(--ink) 70%);
+  color: var(--text-on-ink);
+  border-radius: 16px;
+  padding: 2.5rem 3rem;
+  flex-wrap: wrap;
+}
+
+.gv-hero-copy h1 {
+  margin: 0 0 1.25rem;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--ivory);
+}
+
+.gv-hero-figure {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+}
+
+.gv-hero-value {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--gold-bright);
+  line-height: 1;
+}
+
+.gv-hero-value small {
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin-left: 0.2rem;
+}
+
+/* Gauge */
+
+.gv-gauge {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.gv-gauge-svg {
+  width: 160px;
+  height: 160px;
+}
+
+.gv-gauge-ring {
+  transition: stroke-dashoffset 0.8s ease;
+}
+
+.gv-gauge-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.gv-gauge-pct {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--ivory);
+}
+
+.gv-gauge-label {
+  font-size: 0.65rem;
+  color: var(--text-muted-on-ink);
+  text-align: center;
+  max-width: 6rem;
+}
+
+.gv-gauge-note {
+  position: absolute;
+  bottom: -1.75rem;
+  font-size: 0.75rem;
+  color: var(--text-muted-on-ink);
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Sections                                                                 */
+/* ---------------------------------------------------------------------- */
+
+.gv-section {
+  margin-top: 2.75rem;
+}
+
+.gv-section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.gv-section-head h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.gv-link {
+  color: var(--maroon);
+  text-decoration: none;
+  font-size: 0.825rem;
+  font-weight: 600;
+}
+
+.gv-link:hover {
+  text-decoration: underline;
+}
+
+/* Plans */
+
+.gv-plan-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.gv-plan-card {
+  text-align: left;
+  background: #fff;
+  border: 1px solid var(--sand);
+  border-radius: 12px;
+  padding: 1.25rem;
+  cursor: pointer;
+  transition: border-color 0.15s ease, transform 0.1s ease;
+}
+
+.gv-plan-card:hover {
+  border-color: var(--gold);
+  transform: translateY(-2px);
+}
+
+.gv-plan-icon {
+  color: var(--gold-dim);
+}
+
+.gv-plan-name {
+  margin-top: 0.6rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--text-dark);
+}
+
+.gv-plan-blurb {
+  margin-top: 0.25rem;
+  font-size: 0.8rem;
+  color: var(--text-muted-dark);
+}
+
+/* Two-column layout: ledger + catalogue */
+
+.gv-dash-columns {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 2rem;
+  margin-top: 2.75rem;
+}
+
+.gv-dash-columns .gv-section {
+  margin-top: 0;
+}
+
+.gv-ledger-card {
+  background: #fff;
+  border: 1px solid var(--ivory-dim);
+  border-radius: 12px;
+  padding: 0.5rem 1.25rem;
+}
+
+.gv-ledger-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.gv-ledger-dot {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.gv-ledger-dot.credit {
+  background: rgba(92, 122, 99, 0.12);
+  color: var(--sage);
+}
+
+.gv-ledger-dot.debit {
+  background: rgba(107, 30, 35, 0.1);
+  color: var(--maroon);
+}
+
+.gv-ledger-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-dark);
+}
+
+.gv-ledger-date {
+  font-size: 0.75rem;
+  color: var(--text-muted-dark);
+  margin-top: 0.1rem;
+}
+
+.gv-ledger-right {
+  text-align: right;
+}
+
+.gv-ledger-sub {
+  font-family: var(--font-ledger);
+  font-size: 0.75rem;
+  color: var(--text-muted-dark);
+  margin-top: 0.15rem;
+}
+
+/* Catalogue */
+
+.gv-catalogue-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.gv-catalogue-card {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  background: #fff;
+  border: 1px solid var(--ivory-dim);
+  border-radius: 12px;
+  padding: 0.9rem 1rem;
+}
+
+.gv-catalogue-swatch {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #fff;
+}
+
+.gv-catalogue-swatch.tone-gold {
+  background: linear-gradient(135deg, var(--gold), var(--gold-dim));
+}
+
+.gv-catalogue-swatch.tone-rose {
+  background: linear-gradient(135deg, #c98a7d, #8a4d43);
+}
+
+.gv-catalogue-swatch.tone-deep {
+  background: linear-gradient(135deg, var(--maroon-bright), var(--ink));
+}
+
+.gv-catalogue-info {
+  flex: 1;
+}
+
+.gv-catalogue-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.gv-catalogue-grams {
+  font-family: var(--font-ledger);
+  font-size: 0.75rem;
+  color: var(--text-muted-dark);
+  margin-top: 0.1rem;
+}
+
+.gv-catalogue-status {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.gv-catalogue-status.ready {
+  background: rgba(92, 122, 99, 0.12);
+  color: var(--sage);
+}
+
+.gv-catalogue-status.locked {
+  background: var(--ivory-dim);
+  color: var(--text-muted-dark);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Responsive                                                              */
+/* ---------------------------------------------------------------------- */
+
+@media (max-width: 900px) {
+  .gv-dash-main {
+    padding: 2rem 1.25rem 3rem;
+  }
+
+  .gv-topbar {
+    padding: 1rem 1.25rem;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .gv-nav {
+    order: 3;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .gv-hero {
+    padding: 2rem 1.5rem;
+  }
+
+  .gv-plan-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .gv-dash-columns {
+    grid-template-columns: 1fr;
+  }
+}

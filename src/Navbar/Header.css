@@ -1,0 +1,100 @@
+.navbar-ul {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar-ul li {
+  margin: 0;
+}
+
+.gv-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2.5rem;
+  background: var(--ink);
+  color: var(--text-on-ink);
+}
+
+.gv-topbar .gv-login-brand {
+  font-size: 1.05rem;
+}
+
+.gv-nav {
+  display: flex;
+  gap: 1.75rem;
+}
+
+.gv-nav a {
+  color: var(--text-muted-on-ink);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding-bottom: 0.35rem;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.gv-nav a:hover {
+  color: var(--ivory);
+}
+
+.gv-nav a.active {
+  color: var(--gold-bright);
+  border-bottom-color: var(--gold-bright);
+}
+
+.gv-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.gv-topbar-right a {
+  color: var(--text-muted-on-ink);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding-bottom: 0.35rem;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.gv-topbar-right a:hover {
+  color: var(--ivory);
+}
+
+.gv-topbar-right a.active {
+  color: var(--gold-bright);
+  border-bottom-color: var(--gold-bright);
+}
+
+.gv-icon-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted-on-ink);
+  cursor: pointer;
+  display: flex;
+}
+
+.gv-icon-btn:hover {
+  color: var(--gold-bright);
+}
+
+.gv-avatar {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  background: var(--gold-dim);
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.9rem;
+}

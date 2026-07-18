@@ -1,0 +1,151 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap');
+
+/* ------------------------------------------------------------------------
+   GoldVault design tokens
+   Ink/velvet base, burnished gold accent, oxblood secondary.
+   Display: Playfair Display (headings, big balance numbers)
+   Body:    Work Sans
+   Ledger:  IBM Plex Mono (amounts, transaction rows)
+------------------------------------------------------------------------ */
+
+:root {
+  --ink: #1c1a17;
+  --ink-soft: #2b2620;
+  --ink-line: #3a332a;
+
+  --gold: #c6a15b;
+  --gold-bright: #e3c077;
+  --gold-dim: #8a713f;
+
+  --maroon: #6b1e23;
+  --maroon-bright: #8a2a30;
+
+  --ivory: #fbf7f0;
+  --ivory-dim: #f1ead9;
+  --sand: #d8c9a3;
+
+  --sage: #5c7a63;
+
+  --text-dark: #2b2620;
+  --text-muted-dark: #6b6153;
+  --text-on-ink: #f1ead9;
+  --text-muted-on-ink: #b9ae9a;
+
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-body: "Work Sans", system-ui, -apple-system, sans-serif;
+  --font-ledger: "IBM Plex Mono", "Courier New", monospace;
+}
+
+.gv-scope {
+  font-family: var(--font-body);
+  color: var(--text-dark);
+  box-sizing: border-box;
+}
+
+.gv-scope *,
+.gv-scope *::before,
+.gv-scope *::after {
+  box-sizing: border-box;
+}
+
+/* ------------------------------------------------------------------------
+   Buttons
+------------------------------------------------------------------------ */
+
+.gv-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: none;
+  border-radius: 6px;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+}
+
+.gv-btn:active {
+  transform: translateY(1px);
+}
+
+.gv-btn-gold {
+  background: var(--gold);
+  color: var(--ink);
+  padding: 0.85rem 1.5rem;
+}
+
+.gv-btn-gold:hover {
+  background: var(--gold-bright);
+}
+
+.gv-btn-ghost {
+  background: transparent;
+  border: 1px solid var(--ink-line);
+  color: var(--text-on-ink);
+  padding: 0.7rem 1.25rem;
+}
+
+.gv-btn-ghost:hover {
+  border-color: var(--gold);
+  color: var(--gold-bright);
+}
+
+.gv-btn-outline-dark {
+  background: transparent;
+  border: 1px solid var(--sand);
+  color: var(--text-dark);
+  padding: 0.7rem 1.25rem;
+}
+
+.gv-btn-outline-dark:hover {
+  border-color: var(--maroon);
+  color: var(--maroon);
+}
+
+/* ------------------------------------------------------------------------
+   Ledger row (shared by transaction lists)
+------------------------------------------------------------------------ */
+
+.gv-ledger-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid var(--ivory-dim);
+  font-size: 0.875rem;
+}
+
+.gv-ledger-row:last-child {
+  border-bottom: none;
+}
+
+.gv-ledger-amount {
+  font-family: var(--font-ledger);
+  font-weight: 500;
+}
+
+.gv-ledger-amount.positive {
+  color: var(--sage);
+}
+
+.gv-ledger-amount.negative {
+  color: var(--maroon-bright);
+}
+
+/* Visible focus states for accessibility */
+.gv-scope a:focus-visible,
+.gv-scope button:focus-visible,
+.gv-scope input:focus-visible {
+  outline: 2px solid var(--gold-bright);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gv-scope * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
