@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: GoldVault
+
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:golddb
+    username: gold
+    password: gold123
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    database-platform: org.hibernate.dialect.H2Dialect
+
+server:
+  port: 9090

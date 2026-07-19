@@ -1,0 +1,64 @@
+Backend — data model (high level)
+
+EntityKey            fields
+User             id, name, email, password_hash, role
+Wallet           id, user_id, cash_balance, gold_grams_balance
+Investment       id, user_id, amount, status, created_at
+Transaction      id, user_id, type (credit/debit), amount,ref_id, created_at
+
+
+Backend — weekly schedule (6 weeks)
+
+Week 1 — Foundation & Auth
+
+
+Project scaffolding (Spring Boot, DB config, environment profiles: dev/prod)
+User entity, registration, login, JWT-based auth, password hashing
+Role support (CUSTOMER, ADMIN) for later admin endpoints
+Deliverable: /auth/register, /auth/login working end to end, Postman collection
+
+
+Week 2 — Wallet & Dashboard
+
+
+Wallet entity (cash balance + gold grams balance), created automatically on signup
+Transaction entity + ledger write path
+Dashboard API: current balance, grams held, recent transactions, progress toward next redeemable item
+Deliverable: GET /wallet, GET /transactions (paginated, filterable by type/date)
+
+
+Week 3 — Investment & Payment
+
+
+InvestmentPlan seed data (Monthly Saver, Flexi, Lumpsum)
+Investment entity + /invest endpoint (validate amount, create pending investment)
+Payment integration — start with a mock/sandbox provider (e.g. Razorpay/Stripe test mode) so the flow is real without live money
+On successful payment: credit Transaction, update Wallet.cash_balance or grams depending on your product decision (cash-first vs. grams-first — needs a client decision, see open questions below)
+Deliverable: POST /invest, POST /payments/confirm, webhook handler for payment provider
+
+
+Week 4 — Redemption Request
+
+
+RedemptionRequest entity + /redeem/request endpoint (user picks amount/grams + requested date)
+Validation: requested amount ≤ available balance, requested date ≥ today
+Status transitions: pending → scheduled
+Deliverable: POST /redeem/request, GET /redeem/requests (user's own requests + status)
+
+Week 5 — Admin, Notifications, Reporting
+
+
+Admin views: pending redemption requests, daily rate entry screen, order fulfilment status updates
+Notifications (email at minimum) on: payment success, redemption purchased, order status change
+Basic reporting: total AUM, total grams held across users, redemption volume
+Deliverable: admin API set + notification hooks
+
+
+Week 6 — Hardening & Deployment
+
+
+Security review (JWT expiry/refresh, rate limiting on auth, input validation everywhere)
+Move H2 → real DB (Postgres/MySQL) for staging/prod, externalize secrets
+Load/edge-case testing on the redemption→purchase scheduled job (this is the riskiest piece — money and gold both move here)
+CI/CD pipeline, deploy to staging
+Deliverable: staging environment live, test coverage on core money-movement paths
