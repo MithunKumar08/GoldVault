@@ -15,7 +15,7 @@ public class DateUtil {
 
     public static LocalDateTime getLocalDate(){
         Date date = new Date();
-        LocalDateTime localDate = LocalDateTime.now(ZoneId.of("Asis/Kolkata"));
+        LocalDateTime localDate = LocalDateTime.now(ZoneId.of("Asia/Kolkata"));
 
         logger.info("Date: {}  | Local Date: {}",date,localDate);
 
