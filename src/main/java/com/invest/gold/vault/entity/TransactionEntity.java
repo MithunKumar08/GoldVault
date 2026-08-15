@@ -17,6 +17,8 @@ public class TransactionEntity {
 
     private String sessionId;
 
+    private String paymentIntent;
+
     private Long userId;
 
     private BigDecimal amount;

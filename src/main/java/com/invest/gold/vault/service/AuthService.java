@@ -1,6 +1,8 @@
 package com.invest.gold.vault.service;
 
+import com.invest.gold.vault.dao.TransactionDao;
 import com.invest.gold.vault.entity.UserEntity;
+import com.invest.gold.vault.entity.WalletEntity;
 import com.invest.gold.vault.entity.auth.LoginRequest;
 import com.invest.gold.vault.entity.auth.LoginResponse;
 import com.invest.gold.vault.repository.AuthRepo;
@@ -16,6 +18,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import static com.invest.gold.vault.constants.GoldConstants.CUSTOMER;
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -24,6 +28,7 @@ public class AuthService {
     private final BCryptPasswordEncoder encoder;
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
+    private final TransactionService transactionService;
 
     public ResponseEntity<String> register(UserEntity userRequest) {
         try{
@@ -35,11 +40,13 @@ public class AuthService {
             user.setUserName(userRequest.getUsername());
             user.setPassword(encoder.encode(userRequest.getPassword()));
             user.setEmailId(userRequest.getEmailId());
-            user.setRole("CUSTOMER");
+            user.setRole(String.valueOf(CUSTOMER));
             user.setMobileNo(userRequest.getMobileNo());
             user.setCreatedDate(DateUtil.getLocalDate());
             user.setLastUpdatedDate(DateUtil.getLocalDate());
             authRepo.save(user);
+
+            transactionService.saveWalletData(new WalletEntity(),user);
             return new ResponseEntity<>("User Registered Successfully..",HttpStatus.CREATED);
         } catch (RuntimeException e) {
             throw new RuntimeException(e);

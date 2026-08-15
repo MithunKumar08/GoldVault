@@ -27,7 +27,7 @@ public class JwtAuthService extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         String requestURL = String.valueOf(request.getRequestURL());
-        if(requestURL.contains("/auth/v1/register") || requestURL.contains("/auth/v1/login") || requestURL.contains("/gold/v1/webhook")){
+        if(requestURL.contains("/auth/v1/register") || requestURL.contains("/auth/v1/login") || requestURL.contains("/gold/v1/webhook") || requestURL.contains("/h2-console")){
             filterChain.doFilter(request,response);
             return;
         }

@@ -23,9 +23,9 @@ public class WebSecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/gold/v1/webhook").permitAll()
+                        .requestMatchers("/gold/v1/webhook","/h2-console/**").permitAll()
                         .anyRequest().authenticated())
-                        //.anyRequest().permitAll())
+                .headers(headers -> headers.frameOptions(frame -> frame.disable()))
                 .addFilterBefore(jwtAuthService, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
