@@ -1,6 +1,7 @@
 package com.invest.gold.vault.entity.auth;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
@@ -8,12 +9,9 @@ import lombok.Data;
 @Data
 public class LoginRequest {
 
-    @NotBlank(message = "User Name is Required")
-    @Pattern(
-            regexp = "^(?=.*\\d)[a-zA-Z][a-zA-Z0-9]{4,}$",
-            message = "Username must start with a letter, contain at least 5 characters, and include at least one number"
-    )
-    private String userName;
+    @NotBlank(message = "Email is Required")
+    @Email(message = "Email is invalid")
+    private String userEmail;
 
     @NotBlank(message = "Password is required")
     @Pattern(

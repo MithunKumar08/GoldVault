@@ -40,10 +40,10 @@ public class JwtAuthService extends OncePerRequestFilter {
 
             String token = header.split("Bearer ")[1];
 
-            String getUserName = jwtUtils.getUserNameFromToken(token);
+            String getUserName = jwtUtils.getUserEmailFromToken(token);
 
             if (getUserName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                UserEntity user = authRepo.findByUserName(getUserName);
+                UserEntity user = authRepo.findByEmailId(getUserName);
                 if(user == null){
                     throw new UsernameNotFoundException("User Not Found, Please Register..");
                 }

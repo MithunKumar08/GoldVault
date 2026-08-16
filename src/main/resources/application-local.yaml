@@ -19,9 +19,3 @@ spring:
     show-sql: true
     database-platform: org.hibernate.dialect.H2Dialect
 
-server:
-  port: 9090
-
-stripe:
-  key: ${secret_key}
-  webhook-key: whsec_4be1ae2d0d87f07ce910f768b5105170f913aebc185ecda44c38274241a895d9

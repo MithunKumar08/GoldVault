@@ -21,8 +21,9 @@ public class JwtUtils {
 
     public String getToken(UserEntity request) {
         return Jwts.builder()
-                .setSubject(request.getUsername())
+                .setSubject(request.getEmailId())
                 .claim("userId",request.getUserId())
+                .claim("role",request.getRole())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 1000*60*10))
                 .signWith(getSECRET_KEY())
@@ -30,7 +31,7 @@ public class JwtUtils {
 
     }
 
-    public String getUserNameFromToken(String token) {
+    public String getUserEmailFromToken(String token) {
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(getSECRET_KEY())
                 .build()
@@ -39,5 +40,15 @@ public class JwtUtils {
 
        return claims.getSubject();
 
+    }
+
+    public String getRoleFromToken(String token){
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(getSECRET_KEY())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+
+        return  claims.get("role", String.class);
     }
 }
