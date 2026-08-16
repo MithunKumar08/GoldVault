@@ -3,6 +3,7 @@ import { NavLink, useNavigate } from 'react-router-dom'
 import {Bell} from "lucide-react";
 import '../theme.css'
 import '../Navbar/Header.css'
+import ApiService from '../APIService/ApiService';
 
 const Header = () => {
 
@@ -10,7 +11,8 @@ const Header = () => {
         const handleLogout = () => {
         const isLogout = window.confirm('Are you sure you want to logout this user?');
         if (isLogout) {
-            navigate('/login');
+          ApiService.logoutUser();
+          navigate('/login');
         }
     };
 

@@ -2,8 +2,8 @@ import { useState, useMemo } from "react";
 import { TrendingUp, ShieldCheck, Zap, ArrowLeft, ArrowRight } from "lucide-react";
 import "../invest/InvestmentTab.css";
 import '../theme.css'
-import PaymentSection from "../invest/PaymentSection";
 import HeaderTab from '../Navbar/Header'
+import ApiService from "../APIService/ApiService";
 
 // ---------------------------------------------------------------------------
 // Plan config
@@ -11,7 +11,7 @@ import HeaderTab from '../Navbar/Header'
 
 
 const QUICK_AMOUNTS = [500, 1000, 5000, 10000];
-const MIN_AMOUNT = 100;
+const MIN_AMOUNT = 500;
 const MAX_AMOUNT = 250000;
 
 function formatCurrency(n) {
@@ -31,7 +31,6 @@ export default function InvestmentFlow({ onComplete }) {
   const [amountInput, setAmountInput] = useState("1000");
   const [error, setError] = useState("");
 
-
   function handleAmountChange(raw) {
     const cleaned = raw.replace(/[^\d.]/g, "");
     setAmountInput(cleaned);
@@ -44,7 +43,7 @@ export default function InvestmentFlow({ onComplete }) {
     setAmountInput(String(n));
   }
 
-  function handleContinue() {
+  async function handleContinue() {
     if (!amount || amount < MIN_AMOUNT) {
       setError(`Minimum investment is ${formatCurrency(MIN_AMOUNT)}.`);
       return;
@@ -54,7 +53,23 @@ export default function InvestmentFlow({ onComplete }) {
       return;
     }
     setError("");
-    setStep("payment");
+    try{
+      const paymentRequest = {
+        productName: "gold_invest",
+        quantity: 1,
+        amount: amount*100,
+        currency: "inr"
+      }
+
+    const response = await ApiService.makePayment(paymentRequest);
+    console.log("Captured Data: ",response.url)
+    if(response.status === 'SUCCESS' && response.url){
+      window.location.href = response.url;
+    }
+    }catch (error){
+      console.log(error);
+    }
+    //setStep("payment");
   }
 
   async function handlePaymentSubmit(card) {
@@ -67,31 +82,6 @@ export default function InvestmentFlow({ onComplete }) {
     }
   }
 
-  if (step === "payment") {
-    return (
-      <div className="investment-flow">
-        <button className="back-btn" onClick={() => setStep("invest")}>
-          <ArrowLeft className="icon-sm" />
-          Back to investment details
-        </button>
-
-        <div className="summary-box">
-        <div className="summary-row">
-          <span>Investment Amount</span>
-          <span className="summary-value">
-          {formatCurrency(amount)}
-          </span>
-        </div>
-        </div>
-
-        <PaymentSection
-          amount={amount}
-          currency="INR"
-          onSubmit={handlePaymentSubmit}
-        />
-      </div>
-    );
-  }
 
   return (
     <div className="investment-card">

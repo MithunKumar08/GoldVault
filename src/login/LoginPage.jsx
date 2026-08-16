@@ -3,6 +3,7 @@ import { Mail, Lock, Eye, EyeOff, ShieldCheck } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import "../theme.css";
 import "../login/LoginPage.css";
+import ApiService from "../APIService/ApiService";
 
 export default function LoginPage({ onLogin }) {
   const [email, setEmail] = useState("");
@@ -14,30 +15,70 @@ export default function LoginPage({ onLogin }) {
   const navigate = useNavigate();
 
   async function handleSubmit(e) {
-    e.preventDefault();
-    if (!email || !password) {
-      setError("Enter your email and password to continue.");
-      return;
-    }
+  e.preventDefault();
+
+  // Email validation
+  if (!email.trim()) {
+    setError("Email is required.");
+    return;
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!emailRegex.test(email)) {
+    setError("Please enter a valid email address.");
+    return;
+  }
+
+  // Password validation
+  if (!password) {
+    setError("Password is required.");
+    return;
+  }
+
+  const passwordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=!]).{8,}$/;
+
+  if (!passwordRegex.test(password)) {
+    setError(
+      "Password must contain at least 8 characters, 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character."
+    );
+    return;
+  }
+
+  try {
     setError("");
     setStatus("submitting");
 
+    const response = await ApiService.loginUser({
+      userEmail: email,
+      password: password,
+    });
+
+      localStorage.setItem('token',response.token)
+      localStorage.setItem('role',response.role)
+      localStorage.setItem('userId',response.userId)
+
+    console.log("Login successful..");
+
+    if (onLogin) {
+      onLogin(response);
+    }
+
     navigate("/dashboard");
 
-    // try {
-    //   if (onLogin) {
-    //     await onLogin({ email, password, remember });
-    //   } else {
-    //     await new Promise((res) => setTimeout(res, 900));
-    //   }
-    // } catch (err) {
-    //   setStatus("error");
-    //   setError(err?.message ?? "Couldn't sign you in. Please try again.");
-    //   return;
-    // }
+  } catch (error) {
+    console.error("Login failed:", error);
+
+    setError(
+      error?.response?.data?.message ||
+      "Invalid email or password."
+    );
+
+  } finally {
     setStatus("idle");
   }
-
+}
   return (
     <div className="gv-scope gv-login">
       {/* Left panel — brand + ornamental line art */}

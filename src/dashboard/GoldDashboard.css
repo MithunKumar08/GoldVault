@@ -130,6 +130,11 @@
   flex-wrap: wrap;
 }
 
+.gv-hero-copy {
+  flex: 1 1 18rem;
+  min-width: 0;
+}
+
 .gv-hero-copy h1 {
   margin: 0 0 1.25rem;
   font-family: var(--font-display);
@@ -159,22 +164,33 @@
   margin-left: 0.2rem;
 }
 
+.gv-hero-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
 /* Gauge */
+/* Rebuilt so the caption sits in normal flow instead of being absolutely
+   positioned off the bottom of a fixed-height box — that was letting it
+   clip or overlap the hero card edge depending on viewport width. */
 
 .gv-gauge {
-  position: relative;
-  width: 160px;
-  height: 160px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   flex-shrink: 0;
+}
+
+.gv-gauge-ring-wrap {
+  position: relative;
+  width: 160px;
+  height: 160px;
 }
 
 .gv-gauge-svg {
   width: 160px;
   height: 160px;
+  display: block;
 }
 
 .gv-gauge-ring {
@@ -206,28 +222,24 @@
 }
 
 .gv-gauge-note {
-  position: absolute;
-  bottom: -1.75rem;
+  margin-top: 0.85rem;
   font-size: 0.75rem;
   color: var(--text-muted-on-ink);
+  text-align: center;
   white-space: nowrap;
 }
-
-/* ---------------------------------------------------------------------- */
-/* Sections                                                                 */
-/* ---------------------------------------------------------------------- */
 
 .gv-section {
   margin-top: 2.75rem;
 }
-
+ 
 .gv-section-head {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   margin-bottom: 1rem;
 }
-
+ 
 .gv-section-head h2 {
   margin: 0;
   font-family: var(--font-display);
@@ -235,26 +247,26 @@
   font-weight: 600;
   color: var(--text-dark);
 }
-
+ 
 .gv-link {
   color: var(--maroon);
   text-decoration: none;
   font-size: 0.825rem;
   font-weight: 600;
 }
-
+ 
 .gv-link:hover {
   text-decoration: underline;
 }
-
+ 
 /* Plans */
-
+ 
 .gv-plan-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
 }
-
+ 
 .gv-plan-card {
   text-align: left;
   background: #fff;
@@ -264,16 +276,16 @@
   cursor: pointer;
   transition: border-color 0.15s ease, transform 0.1s ease;
 }
-
+ 
 .gv-plan-card:hover {
   border-color: var(--gold);
   transform: translateY(-2px);
 }
-
+ 
 .gv-plan-icon {
   color: var(--gold-dim);
 }
-
+ 
 .gv-plan-name {
   margin-top: 0.6rem;
   font-family: var(--font-display);
@@ -281,39 +293,53 @@
   font-size: 1rem;
   color: var(--text-dark);
 }
-
+ 
 .gv-plan-blurb {
   margin-top: 0.25rem;
   font-size: 0.8rem;
   color: var(--text-muted-dark);
 }
-
+ 
 /* Two-column layout: ledger + catalogue */
-
+ 
 .gv-dash-columns {
   display: grid;
-  grid-template-columns: 1.3fr 1fr;
+  grid-template-columns: 1fr;
   gap: 2rem;
   margin-top: 2.75rem;
 }
-
+ 
 .gv-dash-columns .gv-section {
   margin-top: 0;
 }
-
+ 
 .gv-ledger-card {
   background: #fff;
   border: 1px solid var(--ivory-dim);
   border-radius: 12px;
   padding: 0.5rem 1.25rem;
 }
-
+ 
+.gv-ledger-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--ivory-dim);
+}
+ 
+.gv-ledger-row:last-child {
+  border-bottom: none;
+}
+ 
 .gv-ledger-left {
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  min-width: 0;
 }
-
+ 
 .gv-ledger-dot {
   width: 1.75rem;
   height: 1.75rem;
@@ -322,49 +348,79 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  background: var(--ivory-dim);
+  color: var(--gold-dim);
 }
-
-.gv-ledger-dot.credit {
-  background: rgba(92, 122, 99, 0.12);
-  color: var(--sage);
-}
-
-.gv-ledger-dot.debit {
-  background: rgba(107, 30, 35, 0.1);
-  color: var(--maroon);
-}
-
+ 
 .gv-ledger-label {
   font-size: 0.875rem;
   font-weight: 500;
   color: var(--text-dark);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-
+ 
 .gv-ledger-date {
   font-size: 0.75rem;
   color: var(--text-muted-dark);
   margin-top: 0.1rem;
 }
-
+ 
 .gv-ledger-right {
-  text-align: right;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
 }
-
-.gv-ledger-sub {
+ 
+.gv-ledger-amount {
   font-family: var(--font-ledger);
-  font-size: 0.75rem;
-  color: var(--text-muted-dark);
-  margin-top: 0.15rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  white-space: nowrap;
 }
-
+ 
+.gv-ledger-status {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  white-space: nowrap;
+  text-transform: capitalize;
+}
+ 
+.gv-ledger-status.success {
+  background: rgba(92, 122, 99, 0.12);
+  color: var(--sage);
+}
+ 
+.gv-ledger-status.pending {
+  background: var(--ivory-dim);
+  color: var(--gold-dim);
+}
+ 
+.gv-ledger-status.failed {
+  background: rgba(107, 30, 35, 0.1);
+  color: var(--maroon);
+}
+ 
+.gv-empty-state {
+  padding: 2rem 1rem;
+  text-align: center;
+  color: var(--text-muted-dark);
+  font-size: 0.85rem;
+}
+ 
 /* Catalogue */
-
+ 
 .gv-catalogue-list {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
 }
-
+ 
 .gv-catalogue-card {
   display: flex;
   align-items: center;
@@ -374,7 +430,7 @@
   border-radius: 12px;
   padding: 0.9rem 1rem;
 }
-
+ 
 .gv-catalogue-swatch {
   width: 2.75rem;
   height: 2.75rem;
@@ -385,36 +441,36 @@
   flex-shrink: 0;
   color: #fff;
 }
-
+ 
 .gv-catalogue-swatch.tone-gold {
   background: linear-gradient(135deg, var(--gold), var(--gold-dim));
 }
-
+ 
 .gv-catalogue-swatch.tone-rose {
   background: linear-gradient(135deg, #c98a7d, #8a4d43);
 }
-
+ 
 .gv-catalogue-swatch.tone-deep {
   background: linear-gradient(135deg, var(--maroon-bright), var(--ink));
 }
-
+ 
 .gv-catalogue-info {
   flex: 1;
 }
-
+ 
 .gv-catalogue-name {
   font-size: 0.875rem;
   font-weight: 600;
   color: var(--text-dark);
 }
-
+ 
 .gv-catalogue-grams {
   font-family: var(--font-ledger);
   font-size: 0.75rem;
   color: var(--text-muted-dark);
   margin-top: 0.1rem;
 }
-
+ 
 .gv-catalogue-status {
   font-size: 0.7rem;
   font-weight: 600;
@@ -422,16 +478,17 @@
   border-radius: 999px;
   white-space: nowrap;
 }
-
+ 
 .gv-catalogue-status.ready {
   background: rgba(92, 122, 99, 0.12);
   color: var(--sage);
 }
-
+ 
 .gv-catalogue-status.locked {
   background: var(--ivory-dim);
   color: var(--text-muted-dark);
 }
+ 
 
 /* ---------------------------------------------------------------------- */
 /* Responsive                                                              */
@@ -464,5 +521,20 @@
 
   .gv-dash-columns {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .gv-hero {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .gv-hero-figure {
+    justify-content: center;
+  }
+
+  .gv-hero-actions {
+    justify-content: center;
   }
 }

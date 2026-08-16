@@ -1,13 +1,37 @@
-import { useState } from 'react'
-import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom'
-import GoldDashboard from '../src/dashboard/GoldDashboard'
-import InvestmentTab from '../src/invest/InvestmentTab'
-import LoginPage from '../src/login/LoginPage'
-import HeaderTab from '../src/Navbar/Header'
-import Transaction from '../src/transaction/Transaction'
-import './App.css'
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Outlet,
+  Navigate
+} from "react-router-dom";
+
+import GoldDashboard from "./dashboard/GoldDashboard";
+import InvestmentTab from "./invest/InvestmentTab";
+import LoginPage from "./login/LoginPage";
+import HeaderTab from "./Navbar/Header";
+import Transaction from "./transaction/Transaction";
+import ApiService from "./APIService/ApiService";
+import PaymentSuccess from "./invest/PaymentSuccess";
+import PaymentFailed from "./invest/PaymentFailure";
+
+import "./App.css";
+
+
+const ProtectedRoute = () => {
+
+  const isAuthenticated = ApiService.isAuthenticated();
+
+  console.log("ProtectedRoute:", isAuthenticated);
+
+  return isAuthenticated
+    ? <Outlet />
+    : <Navigate to="/login" replace />;
+};
+
 
 function MainLayout() {
+
   return (
     <>
       <HeaderTab />
@@ -16,24 +40,58 @@ function MainLayout() {
   );
 }
 
+
 function App() {
 
   return (
-    <>
-      <BrowserRouter>
-      <Routes>
-        <Route path="/login" element={<LoginPage />} />
+    <BrowserRouter>
 
-      <Route element={<MainLayout />}>   
-          <Route path='/invest' element={<InvestmentTab/>}/>
-          <Route path='/dashboard' element={<GoldDashboard/>}/>
-          <Route path='/' element={<GoldDashboard/>}/>
-          <Route path='/transaction' element={<Transaction />} />
-      </Route>
+      <Routes>
+
+        {/* Public */}
+        <Route
+          path="/login"
+          element={<LoginPage />}
+        />
+
+        {/* Protected */}
+        <Route element={<ProtectedRoute />}>
+
+          <Route element={<MainLayout />}>
+
+            <Route
+              path="/dashboard"
+              element={<GoldDashboard />}
+            />
+
+            <Route
+              path="/invest"
+              element={<InvestmentTab />}
+            />
+
+            <Route
+              path="/transaction"
+              element={<Transaction />}
+            />
+
+            <Route 
+            path="/success"
+            element={<PaymentSuccess />}
+            />
+
+            <Route 
+            path="/failed"
+            element={<PaymentFailed />}
+            />
+
+          </Route>
+
+        </Route>
+
       </Routes>
-      </BrowserRouter>
-    </>
-  )
+
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;

@@ -1,169 +1,405 @@
-import { useMemo, useState } from "react";
-import { ArrowUpRight, ArrowDownRight, Search, Download } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import {
+  ArrowUpRight,
+  ArrowDownRight,
+  Clock,
+  Search,
+  Download,
+} from "lucide-react";
+
 import "../theme.css";
 import "../transaction/Transaction.css";
+import ApiService from "../APIService/ApiService";
 
-const TRANSACTIONS = [
-  { id: 1, label: "Monthly Saver deposit", date: "2026-07-12", grams: 1.42, amount: 8600, type: "credit" },
-  { id: 2, label: "Gold rate bonus", date: "2026-07-08", grams: 0.06, amount: 360, type: "credit" },
-  { id: 3, label: "Redeemed — Tulip Studs", date: "2026-06-29", grams: -3.1, amount: -18750, type: "debit" },
-  { id: 4, label: "Monthly Saver deposit", date: "2026-06-12", grams: 1.38, amount: 8350, type: "credit" },
-  { id: 5, label: "Flexi Save top-up", date: "2026-06-02", grams: 0.9, amount: 5450, type: "credit" },
-  { id: 6, label: "Redeemed — Layered Chain", date: "2026-05-18", grams: -7.5, amount: -45300, type: "debit" },
-  { id: 7, label: "Monthly Saver deposit", date: "2026-05-12", grams: 1.4, amount: 8480, type: "credit" },
-  { id: 8, label: "Lumpsum deposit", date: "2026-04-30", grams: 5.0, amount: 30100, type: "credit" },
-];
-
-const FILTERS = [
-  { id: "all", label: "All" },
-  { id: "credit", label: "Deposits" },
-  { id: "debit", label: "Redemptions" },
-];
 
 function formatDate(iso) {
-  return new Date(iso).toLocaleDateString("en-IN", {
-    day: "numeric",
+  if (!iso) return "";
+
+  return new Date(iso).toLocaleString("en-IN", {
+    day: "2-digit",
     month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  });
+}
+
+
+function monthKey(iso) {
+  if (!iso) return "";
+
+  return new Date(iso).toLocaleDateString("en-IN", {
+    month: "long",
     year: "numeric",
   });
 }
 
-function monthKey(iso) {
-  return new Date(iso).toLocaleDateString("en-IN", { month: "long", year: "numeric" });
+
+/* -------------------------------------------------- */
+/* Status helpers                                      */
+/* -------------------------------------------------- */
+
+const MAX_TRANSACTIONS = 10;
+
+function getStatusInfo(status) {
+
+  const key = String(status || "").toUpperCase();
+
+  if (key === "SUCCESS") {
+    return {
+      tone: "success",
+      icon: ArrowUpRight,
+    };
+  }
+
+  if (key === "FAILED") {
+    return {
+      tone: "failed",
+      icon: ArrowDownRight,
+    };
+  }
+
+  /* Anything else (PENDING, IN_PROGRESS, PROCESSING, etc.) */
+
+  return {
+    tone: "pending",
+    icon: Clock,
+  };
+
 }
 
+
+const FILTERS = [
+  {
+    id: "all",
+    label: "All",
+  },
+  {
+    id: "success",
+    label: "Successful",
+  },
+  {
+    id: "failed",
+    label: "Failed",
+  },
+];
+
+
 export default function TransactionsPage() {
+
+  const [transactions, setTransactions] = useState([]);
   const [filter, setFilter] = useState("all");
   const [query, setQuery] = useState("");
+  const [loading, setLoading] = useState(true);
 
-  const filtered = useMemo(() => {
-    return TRANSACTIONS.filter((t) => {
-      const matchesFilter = filter === "all" || t.type === filter;
-      const matchesQuery = t.label.toLowerCase().includes(query.trim().toLowerCase());
-      return matchesFilter && matchesQuery;
-    }).sort((a, b) => new Date(b.date) - new Date(a.date));
-  }, [filter, query]);
 
-  const grouped = useMemo(() => {
-    const groups = {};
-    filtered.forEach((t) => {
-      const key = monthKey(t.date);
-      if (!groups[key]) groups[key] = [];
-      groups[key].push(t);
+  /* -------------------------------------------------- */
+  /* Fetch transactions                                  */
+  /* -------------------------------------------------- */
+
+  useEffect(() => {
+
+    const getTransactions = async () => {
+
+      try {
+
+        setLoading(true);
+
+        const response =
+          await ApiService.getAllTransactions();
+
+        console.log("Transactions:", response);
+
+        setTransactions(response || []);
+
+      } catch (error) {
+
+        console.error(
+          "Error fetching transactions:",
+          error
+        );
+
+        setTransactions([]);
+
+      } finally {
+
+        setLoading(false);
+
+      }
+
+    };
+
+    getTransactions();
+
+  }, []);
+
+
+  /* -------------------------------------------------- */
+  /* Filter + Search                                     */
+  /* -------------------------------------------------- */
+
+  const filteredTransactions = useMemo(() => {
+
+    return transactions.filter((transaction) => {
+
+      /* Status filter */
+
+      if (
+        filter === "success" &&
+        transaction.status !== "SUCCESS"
+      ) {
+        return false;
+      }
+
+      if (
+        filter === "failed" &&
+        transaction.status !== "FAILED"
+      ) {
+        return false;
+      }
+
+
+      /* Search */
+
+      if (query.trim() !== "") {
+
+        const searchText = query
+          .toLowerCase()
+          .trim();
+
+        return (
+          transaction.sessionId
+            ?.toLowerCase()
+            .includes(searchText) ||
+
+          transaction.status
+            ?.toLowerCase()
+            .includes(searchText) ||
+
+          transaction.productName
+            ?.toLowerCase()
+            .includes(searchText)
+        );
+      }
+
+      return true;
+
     });
-    return groups;
-  }, [filtered]);
+
+  }, [transactions, filter, query]);
+
+
+  /* Cap the visible list to the most recent MAX_TRANSACTIONS entries */
+
+  const visibleTransactions = useMemo(
+    () => filteredTransactions.slice(0, MAX_TRANSACTIONS),
+    [filteredTransactions]
+  );
+
+
+  /* -------------------------------------------------- */
+  /* Summary                                             */
+  /* -------------------------------------------------- */
 
   const totals = useMemo(() => {
-    const credited = TRANSACTIONS.filter((t) => t.type === "credit")
-      .reduce((sum, t) => sum + t.amount, 0);
-    const debited = TRANSACTIONS.filter((t) => t.type === "debit")
-      .reduce((sum, t) => sum + Math.abs(t.amount), 0);
-    const netGrams = TRANSACTIONS.reduce((sum, t) => sum + t.grams, 0);
-    return { credited, debited, netGrams };
-  }, []);
+
+    const credited = transactions
+      .filter(
+        (t) => t.status === "SUCCESS"
+      )
+      .reduce(
+        (total, t) =>
+          total + Number(t.amount || 0),
+        0
+      );
+
+    return {
+      credited,
+    };
+
+  }, [transactions]);
+
 
   return (
     <div className="gv-scope gv-tx">
-      <div className="gv-tx-main">
+
+      <main className="gv-tx-main">
+
+        {/* ------------------------------------------------ */}
+        {/* Header                                           */}
+        {/* ------------------------------------------------ */}
+
         <div className="gv-tx-head">
+
           <div>
-            <p className="gv-eyebrow">Ledger</p>
-            <h1>Transactions</h1>
+
+            <p className="gv-eyebrow">
+              Ledger
+            </p>
+
+            <h1>
+              Transactions
+            </h1>
+
           </div>
-          <button className="gv-btn gv-btn-outline-dark gv-tx-export">
-            <Download size={16} /> Export statement
-          </button>
+
         </div>
 
-        {/* Summary strip */}
+
+        {/* ------------------------------------------------ */}
+        {/* Summary                                          */}
+        {/* ------------------------------------------------ */}
+
         <div className="gv-tx-summary">
+
           <div className="gv-tx-summary-card">
-            <span className="gv-tx-summary-label">Total deposited</span>
+
+            <span className="gv-tx-summary-label">
+              Total deposited
+            </span>
+
             <span className="gv-tx-summary-value positive">
               ₹{totals.credited.toLocaleString("en-IN")}
             </span>
+
           </div>
-          <div className="gv-tx-summary-card">
-            <span className="gv-tx-summary-label">Total redeemed</span>
-            <span className="gv-tx-summary-value negative">
-              ₹{totals.debited.toLocaleString("en-IN")}
-            </span>
-          </div>
-          <div className="gv-tx-summary-card">
-            <span className="gv-tx-summary-label">Net gold held</span>
-            <span className="gv-tx-summary-value">{totals.netGrams.toFixed(2)}g</span>
-          </div>
+
         </div>
 
-        {/* Controls */}
+
+        {/* ------------------------------------------------ */}
+        {/* Controls                                         */}
+        {/* ------------------------------------------------ */}
+
         <div className="gv-tx-controls">
+
           <div className="gv-tx-filters">
+
             {FILTERS.map((f) => (
+
               <button
                 key={f.id}
-                className={`gv-tx-filter${filter === f.id ? " active" : ""}`}
-                onClick={() => setFilter(f.id)}
+                className={`gv-tx-filter${
+                  filter === f.id
+                    ? " active"
+                    : ""
+                }`}
+                onClick={() =>
+                  setFilter(f.id)
+                }
               >
                 {f.label}
               </button>
+
             ))}
+
           </div>
+
+
           <div className="gv-tx-search">
+
             <Search size={16} />
+
             <input
               type="text"
               placeholder="Search transactions"
               value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              onChange={(e) =>
+                setQuery(e.target.value)
+              }
             />
+
           </div>
+
         </div>
 
-        {/* Grouped ledger */}
-        {Object.keys(grouped).length === 0 ? (
-          <div className="gv-tx-empty">No transactions match your search.</div>
-        ) : (
-          Object.entries(grouped).map(([month, items]) => (
-            <div className="gv-tx-group" key={month}>
-              <h3 className="gv-tx-group-title">{month}</h3>
-              <div className="gv-ledger-card">
-                {items.map((t) => (
-                  <div className="gv-ledger-row" key={t.id}>
-                    <div className="gv-ledger-left">
-                      <span className={`gv-ledger-dot ${t.type}`}>
-                        {t.type === "credit" ? (
-                          <ArrowUpRight size={13} />
-                        ) : (
-                          <ArrowDownRight size={13} />
-                        )}
-                      </span>
-                      <div>
-                        <div className="gv-ledger-label">{t.label}</div>
-                        <div className="gv-ledger-date">{formatDate(t.date)}</div>
-                      </div>
-                    </div>
-                    <div className="gv-ledger-right">
-                      <div
-                        className={`gv-ledger-amount ${
-                          t.type === "credit" ? "positive" : "negative"
-                        }`}
-                      >
-                        {t.grams > 0 ? "+" : ""}
-                        {t.grams.toFixed(2)}g
-                      </div>
-                      <div className="gv-ledger-sub">
-                        {t.amount > 0 ? "+" : "-"}₹
-                        {Math.abs(t.amount).toLocaleString("en-IN")}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+
+        {/* ------------------------------------------------ */}
+        {/* Transactions (capped at MAX_TRANSACTIONS)        */}
+        {/* ------------------------------------------------ */}
+
+        <div className="gv-tx-list">
+
+          {loading ? (
+
+            <div className="gv-empty-state">
+              Loading transactions...
             </div>
-          ))
-        )}
-      </div>
+
+          ) : visibleTransactions.length === 0 ? (
+
+            <div className="gv-empty-state">
+              No transactions found.
+            </div>
+
+          ) : (
+
+            visibleTransactions.map((t) => {
+
+              const { tone, icon: StatusIcon } = getStatusInfo(t.status);
+
+              return (
+
+                <div
+                  className="gv-tx-row"
+                  key={t.id || t.sessionId}
+                >
+
+                  {/* Left */}
+
+                  <div className="gv-tx-left">
+
+                    <span className={`gv-ledger-dot ${tone}`}>
+                      <StatusIcon size={14} />
+                    </span>
+
+
+                    <div>
+
+                      <div className="gv-ledger-label">
+                        {t.productName || "Gold Investment"}
+                      </div>
+
+                      <div className="gv-ledger-date">
+                        {formatDate(t.transactionTime)}
+                      </div>
+
+                      <div className="gv-ledger-date">
+                        {t.sessionId}
+                      </div>
+
+                    </div>
+
+                  </div>
+
+
+                  {/* Right */}
+
+                  {/* <div className="gv-ledger-right"> */}
+
+                    <div className={`gv-tx-amount ${tone}`}>
+                      ₹{Number(t.amount || 0).toLocaleString("en-IN")}
+                    </div>
+
+                    <div className={`gv-ledger-sub ${tone}`}>
+                      {t.status}
+                    </div>
+
+                  {/* </div> */}
+
+                </div>
+
+              );
+
+            })
+
+          )}
+
+        </div>
+
+      </main>
+
     </div>
   );
 }
