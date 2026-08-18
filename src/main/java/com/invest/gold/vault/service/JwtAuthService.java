@@ -1,16 +1,13 @@
 package com.invest.gold.vault.service;
 
 import com.invest.gold.vault.entity.UserEntity;
-import com.invest.gold.vault.exception.GoldBadRequestException;
 import com.invest.gold.vault.repository.AuthRepo;
 import com.invest.gold.vault.utils.JwtUtils;
-import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -66,7 +63,7 @@ public class JwtAuthService extends OncePerRequestFilter {
 
 
             if (getUserName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                UserEntity user = authRepo.findByUserName(getUserName);
+                UserEntity user = authRepo.findByEmailId(getUserName);
                 if(user == null){
                     throw new UsernameNotFoundException("User Not Found, Please Register..");
                 }

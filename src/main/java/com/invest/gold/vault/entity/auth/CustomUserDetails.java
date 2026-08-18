@@ -17,7 +17,7 @@ public class CustomUserDetails implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity user = authRepo.findByUserName(username);
+        UserEntity user = authRepo.findByEmailId(username);
         if(user == null){
             throw new UsernameNotFoundException("User Not Found, Please Register...");
         }

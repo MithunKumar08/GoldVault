@@ -5,11 +5,13 @@ import com.invest.gold.vault.entity.UserEntity;
 import com.invest.gold.vault.entity.WalletEntity;
 import com.invest.gold.vault.entity.auth.LoginRequest;
 import com.invest.gold.vault.entity.auth.LoginResponse;
+import com.invest.gold.vault.model.UserDto;
 import com.invest.gold.vault.repository.AuthRepo;
 import com.invest.gold.vault.utils.DateUtil;
 import com.invest.gold.vault.utils.JwtUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,6 +19,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 import static com.invest.gold.vault.constants.GoldConstants.CUSTOMER;
 
@@ -32,7 +36,7 @@ public class AuthService {
 
     public ResponseEntity<String> register(UserEntity userRequest) {
         try{
-            UserEntity userEntity = authRepo.findByUserName(userRequest.getUsername());
+            UserEntity userEntity = authRepo.findByEmailId(userRequest.getEmailId());
             if(userEntity != null){
                 return new ResponseEntity<>("User Already Exists..", HttpStatus.BAD_REQUEST);
             }
@@ -56,12 +60,46 @@ public class AuthService {
 
     public ResponseEntity<LoginResponse> login(@Valid LoginRequest request) {
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getUserName(),request.getPassword())
+                new UsernamePasswordAuthenticationToken(request.getUserEmail(),request.getPassword())
         );
 
         UserEntity user = (UserEntity) authentication.getPrincipal();
         assert user != null;
         String token = jwtUtils.getToken(user);
-        return new ResponseEntity<>(new LoginResponse(token,user.getUserId(),HttpStatus.OK.value()),HttpStatus.OK);
+        return new ResponseEntity<>(new LoginResponse(token,user.getRole(),user.getUserId(),HttpStatus.OK.value()),HttpStatus.OK);
+    }
+
+    public ResponseEntity<String> updateUser(UserEntity user, UserDto request) {
+        try{
+
+            UserEntity updateData = new UserEntity();
+            UserEntity userDao = authRepo.findById(user.getUserId()).orElse(null);
+            if(userDao != null){
+                updateData.setUserId(user.getUserId());
+                updateData.setUserName(request.getUsername());
+                updateData.setPassword(request.getPassword());
+                updateData.setRole(userDao.getRole());
+                updateData.setEmailId(userDao.getEmailId());
+                updateData.setMobileNo(request.getMobileNo());
+                updateData.setLastUpdatedDate(DateUtil.getLocalDate());
+
+                authRepo.save(updateData);
+                return new ResponseEntity<>("User Data Updated Successfully...",HttpStatus.OK);
+            }else return new ResponseEntity<>("Something went wrong, Please Try Again...",HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public ResponseEntity<String> deleteUser(Long userId) {
+        try{
+            Optional<UserEntity> user = authRepo.findById(userId);
+            if(user.isPresent()){
+                authRepo.delete(user.get());
+                return new ResponseEntity<>("User Data Deleted Successfully with UserId: " + userId,HttpStatus.OK);
+            }else return new ResponseEntity<>("User Data doesn't exists...  UserId: " + userId,HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

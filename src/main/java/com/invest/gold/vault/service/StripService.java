@@ -67,7 +67,7 @@ public class StripService {
             logger.info("Session Id: {}",session.getMetadata().get("sessionId"));
             transaction.setSessionId(session.getMetadata().get("sessionId"));
             transaction.setPaymentIntent(session.getPaymentIntent());
-            transaction.setAmount(BigDecimal.valueOf(session.getAmountTotal()));
+            transaction.setAmount(BigDecimal.valueOf(session.getAmountTotal()/100));
             transaction.setStatus(String.valueOf(PENDING));
             transaction.setCurrency(session.getCurrency());
             transaction.setTransactionTime(DateUtil.getLocalDate());
@@ -78,7 +78,7 @@ public class StripService {
 
         } catch (Exception e) {
             transaction.setSessionId(session.getMetadata().get("sessionId"));
-            transaction.setAmount(BigDecimal.valueOf(session.getAmountTotal()));
+            transaction.setAmount(BigDecimal.valueOf(session.getAmountTotal()/100));
             transaction.setStatus(String.valueOf(FAILED));
             transaction.setCurrency(session.getCurrency());
             transaction.setTransactionTime(DateUtil.getLocalDate());

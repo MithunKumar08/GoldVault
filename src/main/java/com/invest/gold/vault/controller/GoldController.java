@@ -35,7 +35,7 @@ public class GoldController {
     private final StripService stripService;
     private final TransactionService transactionService;
 
-    @PreAuthorize("CUSTOMER")
+    @PreAuthorize("hasRole('CUSTOMER')")
     @PostMapping("makepayment")
     public StripeResponse makePayment(@RequestBody StripeRequest request , @AuthenticationPrincipal UserEntity user){
        return stripService.makeStripCall(request, user);
@@ -62,6 +62,7 @@ public class GoldController {
         }
     }
 
+    @PreAuthorize("hasRole('CUSTOMER')")
     @GetMapping("getAllTransactions")
     public List<TransactionEntity> getAllTransactions(@RequestParam int pageNo,@RequestParam int size,@AuthenticationPrincipal UserEntity user){
         try {
