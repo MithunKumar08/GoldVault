@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -62,9 +63,9 @@ public class GoldController {
     }
 
     @GetMapping("getAllTransactions")
-    public List<TransactionEntity> getAllTransactions(@AuthenticationPrincipal UserEntity user){
+    public List<TransactionEntity> getAllTransactions(@RequestParam int pageNo,@RequestParam int size,@AuthenticationPrincipal UserEntity user){
         try {
-            return transactionService.getAllTransactions(user.getUserId());
+            return transactionService.getAllTransactions(pageNo,size,user.getUserId());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -1,6 +1,8 @@
 package com.invest.gold.vault.repository;
 
 import com.invest.gold.vault.entity.TransactionEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,5 +16,5 @@ public interface TransactionRepo extends JpaRepository<TransactionEntity,Long> {
 
     Optional<TransactionEntity> findByPaymentIntent(String paymentIntent);
 
-    Optional<List<TransactionEntity>> findByUserId(Long userId);
+    Page<TransactionEntity> findByUserId(Long userId, Pageable pages);
 }

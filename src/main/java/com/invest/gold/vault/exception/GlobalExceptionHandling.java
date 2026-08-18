@@ -1,5 +1,7 @@
 package com.invest.gold.vault.exception;
 
+import io.jsonwebtoken.JwtException;
+import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -28,5 +30,10 @@ public class GlobalExceptionHandling {
     @ExceptionHandler(UsernameNotFoundException.class)
     public ResponseEntity<String> userNotFound(UsernameNotFoundException exception){
         return new ResponseEntity<>(exception.getMessage(),HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(JwtException.class)
+    public ResponseEntity<String> badRequest(JwtException exception){
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }

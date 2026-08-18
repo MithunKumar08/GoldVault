@@ -1,13 +1,16 @@
 package com.invest.gold.vault.service;
 
 import com.invest.gold.vault.entity.UserEntity;
+import com.invest.gold.vault.exception.GoldBadRequestException;
 import com.invest.gold.vault.repository.AuthRepo;
 import com.invest.gold.vault.utils.JwtUtils;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -39,8 +42,28 @@ public class JwtAuthService extends OncePerRequestFilter {
             }
 
             String token = header.split("Bearer ")[1];
+            String getUserName;
 
-            String getUserName = jwtUtils.getUserNameFromToken(token);
+                try {
+                    getUserName = jwtUtils.getUserNameFromToken(token);
+
+                    filterChain.doFilter(request, response);
+
+                } catch (GoldBadRequestException e) {
+
+                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                    response.setContentType("application/json");
+
+                    response.getWriter().write("""
+            {
+                "status":"%s",
+                "message":"%s"
+            }
+            """.formatted(response.getStatus(),e.getMessage()));
+
+                    return;
+                }
+
 
             if (getUserName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserEntity user = authRepo.findByUserName(getUserName);
@@ -54,7 +77,7 @@ public class JwtAuthService extends OncePerRequestFilter {
 
             filterChain.doFilter(request, response);
         } catch (RuntimeException e) {
-            throw new RuntimeException(e);
+            throw new GoldBadRequestException("Incorrect Token or Expired Token.... Please Login Again....");
         }
     }
 }

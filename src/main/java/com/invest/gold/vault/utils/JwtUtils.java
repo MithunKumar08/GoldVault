@@ -1,9 +1,12 @@
 package com.invest.gold.vault.utils;
 
 import com.invest.gold.vault.entity.UserEntity;
+import com.invest.gold.vault.exception.GoldBadRequestException;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -31,13 +34,18 @@ public class JwtUtils {
     }
 
     public String getUserNameFromToken(String token) {
-        Claims claims = Jwts.parserBuilder()
-                .setSigningKey(getSECRET_KEY())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+        try{
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(getSECRET_KEY())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
 
-       return claims.getSubject();
+            return claims.getSubject();
+        } catch (Exception e) {
+            throw new GoldBadRequestException("Incorrect Token or Expired Token.... Please Login Again....");
+        }
+
 
     }
 }
