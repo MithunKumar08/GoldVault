@@ -1,12 +1,14 @@
 package com.invest.gold.vault.service;
 
 import com.invest.gold.vault.dao.TransactionDao;
+import com.invest.gold.vault.entity.TransactionEntity;
 import com.invest.gold.vault.entity.UserEntity;
 import com.invest.gold.vault.entity.WalletEntity;
 import com.invest.gold.vault.entity.auth.LoginRequest;
 import com.invest.gold.vault.entity.auth.LoginResponse;
 import com.invest.gold.vault.model.UserDto;
 import com.invest.gold.vault.repository.AuthRepo;
+import com.invest.gold.vault.repository.TransactionRepo;
 import com.invest.gold.vault.utils.DateUtil;
 import com.invest.gold.vault.utils.JwtUtils;
 import jakarta.validation.Valid;
@@ -33,6 +35,7 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
     private final TransactionService transactionService;
+    private final TransactionRepo transactionRepo;
 
     public ResponseEntity<String> register(UserEntity userRequest) {
         try{
@@ -98,6 +101,18 @@ public class AuthService {
                 authRepo.delete(user.get());
                 return new ResponseEntity<>("User Data Deleted Successfully with UserId: " + userId,HttpStatus.OK);
             }else return new ResponseEntity<>("User Data doesn't exists...  UserId: " + userId,HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public ResponseEntity<String> deleteTransaction(Long tranId) {
+        try{
+            Optional<TransactionEntity> transaction = transactionRepo.findById(tranId);
+            if(transaction.isPresent()){
+                transactionRepo.delete(transaction.get());
+                return new ResponseEntity<>("Transaction Data Deleted Successfully with TransactionId: " + tranId,HttpStatus.OK);
+            }else return new ResponseEntity<>("Transaction Data doesn't exists...  TransactionId: " + tranId,HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

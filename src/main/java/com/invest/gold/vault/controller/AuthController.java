@@ -63,4 +63,14 @@ public class AuthController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("deleteTran/{tranId}")
+    public ResponseEntity<String> deleteTransaction(@PathVariable Long tranId){
+        try{
+            return authService.deleteTransaction(tranId);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

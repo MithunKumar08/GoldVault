@@ -1,6 +1,7 @@
 package com.invest.gold.vault.utils;
 
 import com.invest.gold.vault.entity.UserEntity;
+import com.invest.gold.vault.exception.GoldBadRequestException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -32,13 +33,17 @@ public class JwtUtils {
     }
 
     public String getUserEmailFromToken(String token) {
-        Claims claims = Jwts.parserBuilder()
-                .setSigningKey(getSECRET_KEY())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+        try {
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(getSECRET_KEY())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
 
-       return claims.getSubject();
+            return claims.getSubject();
+        } catch (Exception e) {
+            throw new GoldBadRequestException("Invalid Token ... OR Token Expired......");
+        }
 
     }
 

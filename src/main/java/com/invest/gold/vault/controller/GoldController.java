@@ -1,9 +1,6 @@
 package com.invest.gold.vault.controller;
 
-import com.invest.gold.vault.entity.StripeRequest;
-import com.invest.gold.vault.entity.StripeResponse;
-import com.invest.gold.vault.entity.TransactionEntity;
-import com.invest.gold.vault.entity.UserEntity;
+import com.invest.gold.vault.entity.*;
 import com.invest.gold.vault.service.StripService;
 import com.invest.gold.vault.service.TransactionService;
 import com.stripe.exception.SignatureVerificationException;
@@ -14,12 +11,10 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/gold/v1/")
@@ -64,7 +59,7 @@ public class GoldController {
 
     @PreAuthorize("hasRole('CUSTOMER')")
     @GetMapping("getAllTransactions")
-    public List<TransactionEntity> getAllTransactions(@RequestParam int pageNo,@RequestParam int size,@AuthenticationPrincipal UserEntity user){
+    public ResponseEntity<PageResponse> getAllTransactions(@RequestParam int pageNo, @RequestParam int size, @AuthenticationPrincipal UserEntity user){
         try {
             return transactionService.getAllTransactions(pageNo,size,user.getUserId());
         } catch (Exception e) {

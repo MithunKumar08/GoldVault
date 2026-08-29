@@ -2,6 +2,7 @@ package com.invest.gold.vault.service;
 
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.invest.gold.vault.dao.TransactionDao;
+import com.invest.gold.vault.entity.PageResponse;
 import com.invest.gold.vault.entity.TransactionEntity;
 import com.invest.gold.vault.entity.UserEntity;
 import com.invest.gold.vault.entity.WalletEntity;
@@ -19,11 +20,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.UUID;
 
 import static com.invest.gold.vault.constants.GoldConstants.*;
 
@@ -112,11 +113,21 @@ public class TransactionService {
         }
     }
 
-    public List<TransactionEntity> getAllTransactions(int pageNo, int size,Long userId) {
+    public ResponseEntity<PageResponse> getAllTransactions(int pageNo, int size, Long userId) {
         try{
             Pageable pages = PageRequest.of(pageNo,size);
             Page<TransactionEntity> response = transactionRepo.findByUserId(userId, pages);
-            return response.getContent();
+            PageResponse pageResponse = new PageResponse();
+
+            pageResponse.setContent(response.getContent());
+            pageResponse.setPage(String.valueOf(pageNo));
+            pageResponse.setSize(String.valueOf(response.getSize()));
+            pageResponse.setTotalElements(String.valueOf(response.getTotalElements()));
+            pageResponse.setTotalPages(String.valueOf(response.getTotalPages()));
+            pageResponse.setPage(String.valueOf(response.getTotalPages()));
+            pageResponse.setLast(response.isLast());
+            return new ResponseEntity<>(pageResponse, HttpStatus.OK);
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -1,6 +1,7 @@
 package com.invest.gold.vault.service;
 
 import com.invest.gold.vault.entity.UserEntity;
+import com.invest.gold.vault.exception.GoldBadRequestException;
 import com.invest.gold.vault.repository.AuthRepo;
 import com.invest.gold.vault.utils.JwtUtils;
 import jakarta.servlet.FilterChain;
@@ -39,12 +40,11 @@ public class JwtAuthService extends OncePerRequestFilter {
             }
 
             String token = header.split("Bearer ")[1];
+
             String getUserName;
 
-                try {
-                    getUserName = jwtUtils.getUserNameFromToken(token);
-
-                    filterChain.doFilter(request, response);
+            try {
+                    getUserName = jwtUtils.getUserEmailFromToken(token);
 
                 } catch (GoldBadRequestException e) {
 
@@ -61,8 +61,8 @@ public class JwtAuthService extends OncePerRequestFilter {
                     return;
                 }
 
-
             if (getUserName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+
                 UserEntity user = authRepo.findByEmailId(getUserName);
                 if(user == null){
                     throw new UsernameNotFoundException("User Not Found, Please Register..");
@@ -74,7 +74,7 @@ public class JwtAuthService extends OncePerRequestFilter {
 
             filterChain.doFilter(request, response);
         } catch (RuntimeException e) {
-            throw new GoldBadRequestException("Incorrect Token or Expired Token.... Please Login Again....");
+            throw new RuntimeException(e);
         }
     }
 }
