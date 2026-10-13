@@ -2,10 +2,7 @@ package com.invest.gold.vault.service;
 
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.invest.gold.vault.dao.TransactionDao;
-import com.invest.gold.vault.entity.PageResponse;
-import com.invest.gold.vault.entity.TransactionEntity;
-import com.invest.gold.vault.entity.UserEntity;
-import com.invest.gold.vault.entity.WalletEntity;
+import com.invest.gold.vault.entity.*;
 import com.invest.gold.vault.repository.TransactionRepo;
 import com.invest.gold.vault.utils.DateUtil;
 import com.stripe.Stripe;
@@ -76,8 +73,9 @@ public class TransactionService {
 
             if(sessionId.equals(tran.getSessionId())){
                 tran.setStatus(String.valueOf(SUCCESS));
+                tran.setLastUpdatedTime(DateUtil.getLocalDate());
                 transactionRepo.save(tran);
-                WalletEntity data = transactionDao.getData(tran.getUserId());
+                WalletEntity data = transactionDao.getWalletData(tran.getUserId());
                 BigDecimal total_amount = tran.getAmount().add(data.getAmount_saved());
                 transactionDao.updateWallet(total_amount,DateUtil.getLocalDate(),tran.getUserId());
             }
@@ -109,6 +107,7 @@ public class TransactionService {
             TransactionEntity tran = transactionRepo.findBySessionId(sessionId).get();
 
             tran.setStatus(String.valueOf(FAILED));
+            tran.setLastUpdatedTime(DateUtil.getLocalDate());
             transactionRepo.save(tran);
         }
     }
@@ -128,6 +127,19 @@ public class TransactionService {
             pageResponse.setLast(response.isLast());
             return new ResponseEntity<>(pageResponse, HttpStatus.OK);
 
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public ResponseEntity<DashboardResponse> getDashboardData(UserEntity user) {
+        try{
+            DashboardResponse dashboardResponse = new DashboardResponse();
+            WalletEntity wallet = transactionDao.getWalletData(user.getUserId());
+            dashboardResponse.setUserId(user.getUserId());
+            dashboardResponse.setUserName(user.getUsername());
+            dashboardResponse.setWallet_amount(wallet.getAmount_saved());
+            return new ResponseEntity<>(dashboardResponse,HttpStatus.OK);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

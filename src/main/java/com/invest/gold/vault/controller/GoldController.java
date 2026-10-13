@@ -67,4 +67,13 @@ public class GoldController {
         }
     }
 
+    @PreAuthorize("hasAnyRole('CUSTOMER','ADMIN')")
+    @GetMapping("getDashData")
+    public ResponseEntity<DashboardResponse> getDashboardData(@AuthenticationPrincipal UserEntity user){
+        try{
+            return transactionService.getDashboardData(user);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

@@ -43,7 +43,7 @@ public class AuthController {
         }
     }
 
-    @PreAuthorize("hasRole('ADMIN', 'CUSTOMER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')")
     @PutMapping("updateUser")
     public ResponseEntity<String> updateUser(@AuthenticationPrincipal UserEntity user, @RequestBody UserDto userDto){
         try{

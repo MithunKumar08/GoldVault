@@ -20,18 +20,18 @@ public class TransactionDao {
 
     private String NEW_WALLET = "INSERT INTO Wallet (user_id, amount_saved, created_date, last_updated_date) VALUES (?,?,?,?)";
     private String UPDATE_WALLET = "UPDATE WALLET SET amount_saved = ? and last_updated_date = ? where user_id = ?";
-    private String SELECT_DATA = "SELECT * FROM WALLET WHERE user_id = ?";
+    private String WALLET_DATA = "SELECT * FROM WALLET WHERE user_id = ?";
 
     private final DataSource dataSource;
 
     private static final Logger logger = LoggerFactory.getLogger(TransactionDao.class);
 
 
-    public WalletEntity getData(Long userId) {
+    public WalletEntity getWalletData(Long userId) {
         WalletEntity wallet = new WalletEntity();
 
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement ps = connection.prepareStatement(SELECT_DATA)) {
+             PreparedStatement ps = connection.prepareStatement(WALLET_DATA)) {
 
             ps.setLong(1,userId);
 

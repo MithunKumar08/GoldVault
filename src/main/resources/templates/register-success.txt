@@ -1,0 +1,10 @@
+
+Welcome to GoldVault, {{name}}!
+
+Your account has been successfully created.
+
+You can now log in to GoldVault and explore
+our gold application.
+
+Regards,
+GoldVault Support Team

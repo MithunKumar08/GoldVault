@@ -36,6 +36,7 @@ public class JwtAuthService extends OncePerRequestFilter {
             String header = request.getHeader("Authorization");
 
             if (!header.contains("Bearer")) {
+                logger.info("Missing Header......");
                 throw new RuntimeException("Missing Header......");
             }
 
@@ -48,7 +49,8 @@ public class JwtAuthService extends OncePerRequestFilter {
 
                 } catch (GoldBadRequestException e) {
 
-                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                logger.info("Token Expired......");
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                     response.setContentType("application/json");
 
                     response.getWriter().write("""

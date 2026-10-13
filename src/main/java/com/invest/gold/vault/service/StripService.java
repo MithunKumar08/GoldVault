@@ -66,11 +66,11 @@ public class StripService {
             session = Session.create(params);
             logger.info("Session Id: {}",session.getMetadata().get("sessionId"));
             transaction.setSessionId(session.getMetadata().get("sessionId"));
-            transaction.setPaymentIntent(session.getPaymentIntent());
             transaction.setAmount(BigDecimal.valueOf(session.getAmountTotal()/100));
             transaction.setStatus(String.valueOf(PENDING));
             transaction.setCurrency(session.getCurrency());
             transaction.setTransactionTime(DateUtil.getLocalDate());
+            transaction.setLastUpdatedTime(DateUtil.getLocalDate());
             transaction.setPaymentMethod(String.valueOf(CASHLESS));
             transaction.setUserId(user.getUserId());
 
@@ -82,6 +82,7 @@ public class StripService {
             transaction.setStatus(String.valueOf(FAILED));
             transaction.setCurrency(session.getCurrency());
             transaction.setTransactionTime(DateUtil.getLocalDate());
+            transaction.setLastUpdatedTime(DateUtil.getLocalDate());
             transaction.setPaymentMethod(String.valueOf(CASHLESS));
             transaction.setUserId(user.getUserId());
             transactionRepo.save(transaction);

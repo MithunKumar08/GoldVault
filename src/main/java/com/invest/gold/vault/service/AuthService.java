@@ -1,6 +1,7 @@
 package com.invest.gold.vault.service;
 
 import com.invest.gold.vault.dao.TransactionDao;
+import com.invest.gold.vault.email.EmailService;
 import com.invest.gold.vault.entity.TransactionEntity;
 import com.invest.gold.vault.entity.UserEntity;
 import com.invest.gold.vault.entity.WalletEntity;
@@ -36,6 +37,7 @@ public class AuthService {
     private final JwtUtils jwtUtils;
     private final TransactionService transactionService;
     private final TransactionRepo transactionRepo;
+    private final EmailService emailService;
 
     public ResponseEntity<String> register(UserEntity userRequest) {
         try{
@@ -54,6 +56,8 @@ public class AuthService {
             authRepo.save(user);
 
             transactionService.saveWalletData(new WalletEntity(),user);
+
+            emailService.sentEmail(userRequest);
             return new ResponseEntity<>("User Registered Successfully..",HttpStatus.CREATED);
         } catch (RuntimeException e) {
             throw new RuntimeException(e);

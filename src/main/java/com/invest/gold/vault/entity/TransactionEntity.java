@@ -17,8 +17,6 @@ public class TransactionEntity {
 
     private String sessionId;
 
-    private String paymentIntent;
-
     private Long userId;
 
     private BigDecimal amount;
@@ -28,6 +26,8 @@ public class TransactionEntity {
     private String status;
 
     private LocalDateTime transactionTime;
+
+    private LocalDateTime lastUpdatedTime;
 
     private String paymentMethod;
 
