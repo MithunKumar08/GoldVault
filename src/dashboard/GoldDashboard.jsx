@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Plus, Coins } from "lucide-react";
 
 import "../theme.css";
@@ -19,23 +19,18 @@ function formatDate(iso) {
 }
 
 
-export default function Dashboard({ customerName = "Mithun" }) {
+export default function Dashboard({ customerName = "" }) {
 
-  const goalGrams = 25;
-  const savedGrams = 16.4;
-
-  const progressPct = Math.min(
-    100,
-    Math.round((savedGrams / goalGrams) * 100)
-  );
+  const pageNo = 0;
+  const tranSize = 5;
 
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  const savedValue = useMemo(
-    () => savedGrams * 6050,
-    [savedGrams]
-  );
+  const [dashData, setDashData] = useState({
+    userName: "",
+    firstChar: "",
+    wallet_amount: ""
+  })
 
   useEffect(() => {
 
@@ -45,11 +40,11 @@ export default function Dashboard({ customerName = "Mithun" }) {
 
         setLoading(true);
 
-        const response = await ApiService.getAllTransactions();
+        const response = await ApiService.getAllTransactions(pageNo,tranSize);
 
-        console.log("Transactions:", response);
+        console.log("Transactions:", response.content);
 
-        setTransactions(response || []);
+        setTransactions(response.content || []);
 
       } catch (error) {
 
@@ -67,9 +62,28 @@ export default function Dashboard({ customerName = "Mithun" }) {
       }
     };
 
+    const getDashData = async () => {
+      const dashResponse = await ApiService.getDashData();
+
+      setDashData({
+        userName : dashResponse.userName,
+        firstChar : dashResponse.userName[0],
+        wallet_amount : dashResponse.wallet_amount
+
+      })
+      
+    } 
+
     getAllTransactions();
+    getDashData();
 
   }, []);
+
+  const handleAddFund= () => {
+    window.location.href = "/invest";
+  }
+
+  customerName = dashData.userName;
 
   return (
     <div className="gv-scope gv-dash">
@@ -89,13 +103,13 @@ export default function Dashboard({ customerName = "Mithun" }) {
 
             <div className="gv-hero-figure">
               <span className="gv-hero-value">
-                ₹{savedValue.toLocaleString("en-IN")}
+                ₹{dashData.wallet_amount}
               </span>
             </div>
 
             <div className="gv-hero-actions">
 
-              <button className="gv-btn gv-btn-gold">
+              <button className="gv-btn gv-btn-gold" onClick={handleAddFund}>
                 <Plus size={16} />
                 Add funds
               </button>
@@ -104,11 +118,7 @@ export default function Dashboard({ customerName = "Mithun" }) {
 
           </div>
 
-          <GoldGauge
-            percent={progressPct}
-            savedGrams={savedGrams}
-            goalGrams={goalGrams}
-          />
+          <GoldGauge />
 
         </section>
 
@@ -218,23 +228,10 @@ export default function Dashboard({ customerName = "Mithun" }) {
 
 
 /* ------------------------------------------------------------ */
-/* Gold Gauge                                                    */
+/* Gold Gauge (decorative)                                       */
 /* ------------------------------------------------------------ */
 
-function GoldGauge({
-  percent,
-  savedGrams,
-  goalGrams
-}) {
-
-  const radius = 68;
-
-  const circumference =
-    2 * Math.PI * radius;
-
-  const offset =
-    circumference -
-    (percent / 100) * circumference;
+function GoldGauge() {
 
   return (
 
@@ -247,51 +244,79 @@ function GoldGauge({
           className="gv-gauge-svg"
         >
 
-          {/* Background */}
+          {/* Outer coin body */}
           <circle
             cx="80"
             cy="80"
-            r={radius}
-            fill="none"
-            stroke="var(--ink-line)"
-            strokeWidth="8"
+            r="70"
+            fill="var(--gold-bright)"
+            opacity="0.15"
           />
 
-          {/* Progress */}
           <circle
             cx="80"
             cy="80"
-            r={radius}
+            r="62"
             fill="none"
             stroke="var(--gold-bright)"
-            strokeWidth="8"
-            strokeLinecap="round"
-            strokeDasharray={circumference}
-            strokeDashoffset={offset}
-            transform="rotate(-90 80 80)"
-            className="gv-gauge-ring"
+            strokeWidth="3"
           />
+
+          <circle
+            cx="80"
+            cy="80"
+            r="50"
+            fill="none"
+            stroke="var(--gold-bright)"
+            strokeWidth="1.5"
+            strokeDasharray="4 4"
+            opacity="0.6"
+          />
+
+          {/* Center emblem - stylized bar/ingot */}
+          <g transform="translate(80,80)">
+
+            <rect
+              x="-26"
+              y="-12"
+              width="52"
+              height="24"
+              rx="3"
+              fill="var(--gold-bright)"
+            />
+
+            <rect
+              x="-20"
+              y="-7"
+              width="40"
+              height="14"
+              rx="2"
+              fill="none"
+              stroke="var(--ink-bg, #1a1a1a)"
+              strokeWidth="1"
+              opacity="0.35"
+            />
+
+            <text
+              x="0"
+              y="5"
+              textAnchor="middle"
+              fontSize="11"
+              fontWeight="700"
+              fill="var(--ink-bg, #1a1a1a)"
+              opacity="0.7"
+            >
+              999.9
+            </text>
+
+          </g>
 
         </svg>
 
-
-        <div className="gv-gauge-center">
-
-          <span className="gv-gauge-pct">
-            {percent}%
-          </span>
-
-          <span className="gv-gauge-label">
-            to next piece
-          </span>
-
-        </div>
-
       </div>
 
-
       <p className="gv-gauge-note">
-        {savedGrams.toFixed(1)}g of {goalGrams}g goal
+        Your gold, safely vaulted
       </p>
 
     </div>

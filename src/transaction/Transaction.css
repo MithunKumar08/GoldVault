@@ -282,6 +282,55 @@
   font-size: 0.85rem;
 }
 
+/* Pagination */
+
+.gv-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  padding: 1rem 0;
+}
+
+.gv-page-numbers {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.gv-page-btn,
+.gv-page-number {
+  border: 1px solid var(--sand);
+  background: var(--white, #fff);
+  color: var(--text-dark);
+  border-radius: 6px;
+  padding: 0.5rem 0.8rem;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.15s ease;
+}
+
+.gv-page-number {
+  min-width: 36px;
+}
+
+.gv-page-number.active {
+  background: var(--gold);
+  color: var(--white, #fff);
+  border-color: var(--gold);
+}
+
+.gv-page-btn:hover:not(:disabled),
+.gv-page-number:hover:not(.active) {
+  border-color: var(--gold);
+}
+
+.gv-page-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
 /* ---------------------------------------------------------------------- */
 /* Responsive                                                              */
 /* ---------------------------------------------------------------------- */

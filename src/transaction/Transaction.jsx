@@ -13,6 +13,7 @@ import ApiService from "../APIService/ApiService";
 
 
 function formatDate(iso) {
+
   if (!iso) return "";
 
   return new Date(iso).toLocaleString("en-IN", {
@@ -92,6 +93,9 @@ export default function TransactionsPage() {
   const [filter, setFilter] = useState("all");
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(true);
+  const [pageNumber,setPageNumber] = useState(0);
+  const [tranSize,setTranSize] = useState(10);
+  const [totalPages,setTotalPages] = useState(0);
 
 
   /* -------------------------------------------------- */
@@ -107,11 +111,15 @@ export default function TransactionsPage() {
         setLoading(true);
 
         const response =
-          await ApiService.getAllTransactions();
+          await ApiService.getAllTransactions(pageNumber,tranSize);
 
-        console.log("Transactions:", response);
+        console.log("Transactions:", response.content);
 
-        setTransactions(response || []);
+        setTransactions(response.content || []);
+        
+        console.log("Total Pages: ",response.totalPages)
+        setTotalPages( Number(response.totalPages || 0) );
+
 
       } catch (error) {
 
@@ -132,7 +140,7 @@ export default function TransactionsPage() {
 
     getTransactions();
 
-  }, []);
+  }, [pageNumber, tranSize]);
 
 
   /* -------------------------------------------------- */
@@ -219,6 +227,16 @@ export default function TransactionsPage() {
     };
 
   }, [transactions]);
+
+  /* -------------------------------------------------- */ /* Pagination */ /* -------------------------------------------------- */
+  const handlePageChange = (page) => { 
+     if (page < 0 || page >= totalPages) {
+       return; 
+      } 
+      
+      setPageNumber(page); 
+      window.scrollTo({ top: 0, behavior: "smooth", }); 
+    };
 
 
   return (
@@ -312,7 +330,82 @@ export default function TransactionsPage() {
 
           </div>
 
+          <div>
+
+          </div>
+
         </div>
+
+        {/* ------------------------------------------------ */}
+        {/* Pagination                                       */}
+        {/* ------------------------------------------------ */}
+
+        {!loading && totalPages > 0 && (
+
+          <div className="gv-pagination">
+
+            {/* Previous */}
+
+            <button
+              className="gv-page-btn"
+              disabled={pageNumber === 0}
+              onClick={() =>
+                handlePageChange(
+                  pageNumber - 1
+                )
+              }
+            >
+              Previous
+            </button>
+
+
+            {/* Page numbers */}
+
+            <div className="gv-page-numbers">
+
+              {Array.from(
+                { length: totalPages },
+                (_, index) => (
+
+                  <button
+                    key={index}
+                    className={`gv-page-number ${
+                      pageNumber === index
+                        ? "active"
+                        : ""
+                    }`}
+                    onClick={() =>
+                      handlePageChange(index)
+                    }
+                  >
+                    {index + 1}
+                  </button>
+
+                )
+              )}
+
+            </div>
+
+
+            {/* Next */}
+
+            <button
+              className="gv-page-btn"
+              disabled={
+                pageNumber === totalPages - 1
+              }
+              onClick={() =>
+                handlePageChange(
+                  pageNumber + 1
+                )
+              }
+            >
+              Next
+            </button>
+
+          </div>
+
+               )}
 
 
         {/* ------------------------------------------------ */}
@@ -395,8 +488,10 @@ export default function TransactionsPage() {
             })
 
           )}
+          
 
         </div>
+
 
       </main>
 

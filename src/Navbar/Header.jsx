@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import {Bell} from "lucide-react";
 import '../theme.css'
@@ -8,13 +8,24 @@ import ApiService from '../APIService/ApiService';
 const Header = () => {
 
     const navigate = useNavigate();
-        const handleLogout = () => {
-        const isLogout = window.confirm('Are you sure you want to logout this user?');
+
+    const handleLogout = () => {
+      const isLogout = window.confirm('Are you sure you want to logout this user?');
         if (isLogout) {
           ApiService.logoutUser();
           navigate('/login');
         }
     };
+
+    const [firstChar, setFirstChar] = useState("");
+
+  useEffect(() => {
+      const fetchUser = async () => {
+          const res = await ApiService.getDashData();
+          setFirstChar(res.userName?.[0] || "");
+      };
+      fetchUser();
+  }, []);
 
   return (
     <>
@@ -37,7 +48,7 @@ const Header = () => {
             <button className="gv-icon-btn" aria-label="Notifications">
             <Bell size={18} />
           </button>
-          <div className="gv-avatar">{'M'}</div>
+          <div className="gv-avatar">{firstChar}</div>
          </div>
         </nav>
     </>

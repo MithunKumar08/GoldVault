@@ -14,7 +14,7 @@ import Transaction from "./transaction/Transaction";
 import ApiService from "./APIService/ApiService";
 import PaymentSuccess from "./invest/PaymentSuccess";
 import PaymentFailed from "./invest/PaymentFailure";
-
+import RegistrationPage from "./registration/RegistrationPage"
 import "./App.css";
 
 
@@ -52,6 +52,16 @@ function App() {
         <Route
           path="/login"
           element={<LoginPage />}
+        />
+
+        <Route
+          path="/"
+          element={<LoginPage />}
+        />
+
+        <Route
+          path="/register"
+          element={<RegistrationPage />}
         />
 
         {/* Protected */}

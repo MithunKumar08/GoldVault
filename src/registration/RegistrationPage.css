@@ -1,0 +1,485 @@
+.gv-login {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  background: var(--ivory);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Left panel                                                             */
+/* ---------------------------------------------------------------------- */
+
+.gv-login-panel {
+  background: radial-gradient(
+    circle at 20% 0%,
+    var(--ink-soft),
+    var(--ink) 65%
+  );
+
+  color: var(--text-on-ink);
+  padding: 3rem 3.5rem;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  position: relative;
+  overflow: hidden;
+}
+
+.gv-login-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.gv-mark {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+
+  background: var(--gold-bright);
+
+  box-shadow: 0 0 0 3px rgba(227, 192, 127, 0.2);
+}
+
+/* Necklace */
+
+.gv-necklace {
+  width: 100%;
+  max-width: 320px;
+
+  margin: 1.5rem auto;
+
+  display: block;
+}
+
+.gv-necklace-chain {
+  stroke-dasharray: 420;
+  stroke-dashoffset: 420;
+
+  animation: gv-draw 1.8s ease-out forwards;
+}
+
+@keyframes gv-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Tagline */
+
+.gv-login-tagline h1 {
+  font-family: var(--font-display);
+
+  font-size: 2.1rem;
+  line-height: 1.2;
+  font-weight: 600;
+
+  margin: 0 0 0.85rem;
+
+  color: var(--ivory);
+}
+
+.gv-login-tagline p {
+  font-size: 0.9rem;
+  line-height: 1.6;
+
+  color: var(--text-muted-on-ink);
+
+  max-width: 30ch;
+
+  margin: 0;
+}
+
+/* Trust */
+
+.gv-login-trust {
+  display: flex;
+  align-items: center;
+
+  gap: 0.5rem;
+
+  font-size: 0.8rem;
+
+  color: var(--text-muted-on-ink);
+
+  padding-top: 1.5rem;
+
+  border-top: 1px solid var(--ink-line);
+}
+
+.gv-login-trust svg {
+  color: var(--gold);
+  flex-shrink: 0;
+}
+
+
+/* ---------------------------------------------------------------------- */
+/* Right panel — Registration form                                        */
+/* ---------------------------------------------------------------------- */
+
+.gv-login-formside {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 3rem 2.5rem;
+
+  overflow-y: auto;
+}
+
+
+/* Registration form */
+
+.gv-login-form {
+  width: 100%;
+
+  /*
+   * Slightly wider than the old login form because
+   * registration has four fields.
+   */
+  max-width: 24rem;
+}
+
+
+/* ---------------------------------------------------------------------- */
+/* Form header                                                            */
+/* ---------------------------------------------------------------------- */
+
+.gv-login-formhead {
+  margin-bottom: 1.8rem;
+}
+
+.gv-eyebrow {
+  margin: 0 0 0.35rem;
+
+  font-family: var(--font-ledger);
+
+  font-size: 0.75rem;
+
+  letter-spacing: 0.08em;
+
+  text-transform: uppercase;
+
+  color: var(--gold-dim);
+}
+
+.gv-login-formhead h2 {
+  margin: 0;
+
+  font-family: var(--font-display);
+
+  font-size: 1.65rem;
+
+  font-weight: 600;
+
+  color: var(--text-dark);
+}
+
+
+/* ---------------------------------------------------------------------- */
+/* Form fields                                                            */
+/* ---------------------------------------------------------------------- */
+
+.gv-field {
+  display: block;
+
+  margin-bottom: 1rem;
+}
+
+.gv-field > span {
+  display: block;
+
+  margin-bottom: 0.35rem;
+
+  font-size: 0.8rem;
+
+  font-weight: 500;
+
+  color: var(--text-muted-dark);
+}
+
+
+/* Input wrapper */
+
+.gv-input-wrap {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+
+  width: 100%;
+
+  border: 1px solid var(--sand);
+
+  border-radius: 6px;
+
+  background: var(--white, #fff);
+
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.gv-input-wrap:focus-within {
+  border-color: var(--gold);
+
+  box-shadow:
+    0 0 0 3px rgba(198, 161, 91, 0.15);
+}
+
+
+/* Input icon */
+
+.gv-input-icon {
+  margin-left: 0.75rem;
+
+  color: var(--text-muted-dark);
+
+  flex-shrink: 0;
+}
+
+
+/* Inputs */
+
+.gv-input-wrap input {
+  flex: 1;
+
+  min-width: 0;
+
+  border: none;
+
+  outline: none;
+
+  background: transparent;
+
+  padding: 0.7rem 0.75rem;
+
+  font-size: 0.9rem;
+
+  font-family: var(--font-body);
+
+  color: var(--text-dark);
+}
+
+.gv-input-wrap input::placeholder {
+  color: var(--text-muted-dark);
+
+  opacity: 0.65;
+}
+
+
+/* Remove number input arrows if browser displays them */
+
+.gv-input-wrap input[type="number"]::-webkit-inner-spin-button,
+.gv-input-wrap input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+
+/* Password show/hide button */
+
+.gv-input-toggle {
+  background: none;
+
+  border: none;
+
+  padding: 0 0.75rem;
+
+  color: var(--text-muted-dark);
+
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+
+  transition: color 0.15s ease;
+}
+
+.gv-input-toggle:hover {
+  color: var(--maroon);
+}
+
+
+/* ---------------------------------------------------------------------- */
+/* Error message                                                          */
+/* ---------------------------------------------------------------------- */
+
+.gv-form-error {
+  margin: -0.25rem 0 1rem;
+
+  font-size: 0.8rem;
+
+  line-height: 1.45;
+
+  color: var(--maroon-bright);
+}
+
+
+/* ---------------------------------------------------------------------- */
+/* Submit button                                                          */
+/* ---------------------------------------------------------------------- */
+
+.gv-login-submit {
+  width: 100%;
+
+  margin-top: 0.25rem;
+}
+
+
+/* ---------------------------------------------------------------------- */
+/* Login link                                                             */
+/* ---------------------------------------------------------------------- */
+
+.gv-login-foot {
+  margin-top: 1.25rem;
+
+  text-align: center;
+
+  font-size: 0.85rem;
+
+  color: var(--text-muted-dark);
+}
+
+
+/*
+ * This is now a button instead of <a href="#">
+ * because React navigation handles the Login action.
+ */
+
+.gv-link-button {
+  border: none;
+
+  padding: 0;
+
+  background: transparent;
+
+  color: var(--maroon);
+
+  font-family: var(--font-body);
+
+  font-size: inherit;
+
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.gv-link-button:hover {
+  text-decoration: underline;
+}
+
+
+/* ---------------------------------------------------------------------- */
+/* Responsive                                                             */
+/* ---------------------------------------------------------------------- */
+
+@media (max-width: 860px) {
+
+  .gv-login {
+    grid-template-columns: 1fr;
+  }
+
+  /* Left panel */
+
+  .gv-login-panel {
+    padding: 2.5rem 1.75rem;
+
+    min-height: 420px;
+  }
+
+  .gv-necklace {
+    max-width: 220px;
+
+    margin: 1rem auto;
+  }
+
+  .gv-login-tagline h1 {
+    font-size: 1.6rem;
+  }
+
+
+  /* Registration form */
+
+  .gv-login-formside {
+    padding: 2.5rem 1.75rem;
+
+    align-items: flex-start;
+  }
+
+  .gv-login-form {
+    max-width: 24rem;
+
+    margin: 0 auto;
+  }
+}
+
+
+/* ---------------------------------------------------------------------- */
+/* Small mobile screens                                                   */
+/* ---------------------------------------------------------------------- */
+
+@media (max-width: 480px) {
+
+  .gv-login-panel {
+    padding: 2rem 1.25rem;
+
+    min-height: 380px;
+  }
+
+  .gv-login-brand {
+    font-size: 1.1rem;
+  }
+
+  .gv-necklace {
+    max-width: 180px;
+
+    margin: 0.75rem auto;
+  }
+
+  .gv-login-tagline h1 {
+    font-size: 1.45rem;
+
+    margin-bottom: 0.65rem;
+  }
+
+  .gv-login-tagline p {
+    font-size: 0.82rem;
+  }
+
+  .gv-login-trust {
+    font-size: 0.75rem;
+
+    padding-top: 1rem;
+  }
+
+
+  .gv-login-formside {
+    padding: 2rem 1.25rem;
+  }
+
+  .gv-login-formhead {
+    margin-bottom: 1.5rem;
+  }
+
+  .gv-login-formhead h2 {
+    font-size: 1.45rem;
+  }
+
+  .gv-field {
+    margin-bottom: 0.9rem;
+  }
+
+  .gv-input-wrap input {
+    padding: 0.65rem 0.7rem;
+
+    font-size: 0.85rem;
+  }
+}

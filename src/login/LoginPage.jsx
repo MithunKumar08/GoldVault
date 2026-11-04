@@ -175,7 +175,14 @@ export default function LoginPage({ onLogin }) {
           </button>
 
           <p className="gv-login-foot">
-            New to GoldVault? <a href="#">Open an account</a>
+            New to GoldVault? {" "}
+             <button
+              type="button"
+              className="gv-link-button"
+              onClick={() => navigate("/register")}
+            >
+              Register
+            </button>
           </p>
         </form>
       </div>
