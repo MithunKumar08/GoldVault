@@ -15,5 +15,5 @@ spring:
     database-platform: org.hibernate.dialect.MySQLDialect
 
 cors:
-  url: http://localhost:5173/
+  url: http://goldvault-frontend.s3-website-us-east-1.localhost:4566/
 
